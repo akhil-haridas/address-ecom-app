@@ -1,0 +1,202 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="/profile">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <span>Wishlist</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th></th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(productData.length > 0){
+                                for(let i=0 ;i < productData.length;i++){
+                                    %>
+                                    <tr>
+                                        <td class="cart__product__item">
+                                            <div style="width: 60px;"><img src="/products_img/<%= productData[i].image[0]%>" alt="" style="background-size: contain;"></div>
+                                            <div class="cart__product__item__title">
+                                                <a href="/product?id=<%=productData[i]._id%>">
+                                                    <h6>
+                                                        <%=productData[i].name%>
+                                                    </h6>
+                                                </a>
+                                                <div class="rating">
+                                                    <% for(let j=0; j < Math.round(productData[i].rating); j++) { %>
+                                                        <i class="fa fa-star"></i>
+                                                        <% } %>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="cart__price">&#x20B9;
+                                            <%=productData[i].offerPrice%>
+                                        </td>
+                                        <td>
+                                            <div class="product__details__button" style="margin-bottom: 0px;"><a onclick="addCart('<%=productData[i]._id%>')" class="cart-btn"><span class="icon_bag_alt"></span> Add to cart</a></div>
+                                        </td>
+                                        <td class="cart__close"><a onclick="removeWishlist('<%=productData[i]._id%>')"><span class="icon_close"></span></a></td>
+                                    </tr>
+
+                                    <%
+                        }
+                    }else{
+                        %>
+                                        <tr>
+                                            <td>
+                                                <h4>Currently no wishlist items....</h4>
+                                            </td>
+                                        </tr>
+                                        <%
+                    }
+                    %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Shop Cart Section End -->
+
+    <script>
+        function removeWishlist(productId) {
+
+            $.ajax({
+                url: `remove_wishlist/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        sessionStorage.setItem('wishlistAddedMsg', 'Removed from Wishlist');
+
+                        // Reload the page
+                        window.location.reload();
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+            if (wishlistAddedMsg) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: wishlistAddedMsg
+                });
+
+                // Remove the success message from session storage
+                sessionStorage.removeItem('wishlistAddedMsg');
+
+            }
+        });
+
+
+        function addCart(productId) {
+            $.ajax({
+                url: `add_cart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success == 'added') {
+                        sessionStorage.setItem('wishlistAddedMsg', 'Added to Cart');
+                        window.location.reload();
+                    } else if (response.success == 'already') {
+                        sessionStorage.setItem('wishlistAddedMsg', 'Already in Cart');
+                        window.location.reload();
+                    } else if (response.success == 'stockout') {
+                        sessionStorage.setItem('wishlistAddedMsg', 'Sorry Currentyly Not Available');
+                        window.location.reload();
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+    </script>
+    <%- include( '../homelayouts/homefoot.ejs')%>

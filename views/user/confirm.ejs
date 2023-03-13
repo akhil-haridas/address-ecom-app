@@ -1,0 +1,325 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800&display=swap");
+        body {
+            background-color: #eee;
+            font-family: "Poppins", sans-serif;
+            font-weight: 300
+        }
+        
+        .cart {
+            height: 100vh
+        }
+        
+        .progresses {
+            display: flex;
+            align-items: center
+        }
+        
+        .line {
+            width: 76px;
+            height: 6px;
+            background: #63d19e
+        }
+        
+        .steps {
+            display: flex;
+            background-color: #63d19e;
+            color: #fff;
+            font-size: 12px;
+            width: 30px;
+            height: 30px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%
+        }
+        
+        .check1 {
+            display: flex;
+            background-color: #63d19e;
+            color: #fff;
+            font-size: 17px;
+            width: 60px;
+            height: 60px;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-bottom: 10px
+        }
+        
+        .invoice-link {
+            font-size: 15px
+        }
+        
+        .order-button {
+            height: 50px
+        }
+        
+        .background-muted {
+            background-color: #fafafc
+        }
+    </style>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="#">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <!-- <li><span class="icon_search search-switch"></span></li> -->
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <!-- <li><span class="icon_search search-switch"></span></li> -->
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <a href="/cart">Cart</a>
+                        <a href="/checkout">Checkout</a>
+                        <span>Order Confirmed</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <div class="site__body">
+        <div class="block order-success">
+            <div class="container">
+                <div class="order-success__body">
+                    <div class="order-success__header">
+                        <h1 class="order-success__title">Thank you</h1>
+                        <div class="order-success__subtitle">Your order has been received</div>
+                        <div class="order-success__actions"><a style="background: #ca1515;" href="/orders" class="btn btn-xs btn-secondary">Go To Your Orders</a></div>
+                    </div>
+                    <div class="order-success__meta">
+                        <ul class="order-success__meta-list">
+                            <li class="order-success__meta-item"><span class="order-success__meta-title">Order
+                ID:</span> <span class="order-success__meta-value"><%=orderData._id%></span></li>
+                            <li class="order-success__meta-item"><span class="order-success__meta-title">Created
+                at:</span> <span class="order-success__meta-value"><%=orderData.date%></span></li>
+                            <li class="order-success__meta-item"><span class="order-success__meta-title">Total:</span>
+                                <span class="order-success__meta-value">&#x20B9;&nbsp;<%=orderData.total%></span>
+                            </li>
+                            <li class="order-success__meta-item"><span class="order-success__meta-title">Payment
+                method:</span> <span class="order-success__meta-value"><%=orderData.paymentMethod%></span></li>
+                        </ul>
+                    </div>
+                    <div class="card">
+                        <div class="order-list">
+                            <table>
+                                <thead class="order-list__header">
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="2">Product</th>
+                                        <th class="order-list__column-quantity">Qty</th>
+                                        <th class="order-list__column-total">Total</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="order-list__products">
+                                    <% for(let i=0 ;i < orderData.products.length ;i++){%>
+                                        <tr>
+                                            <td class="order-list__column-image">
+                                                <div class="product-image"><a href="" class="product-image__body"><img class="product-image__img" src="/products_img/<%=orderData.products[i].productId.image[0]%>" alt=""></a></div>
+                                            </td>
+                                            <td class="order-list__column-product">
+                                                <a href="">
+                                                    <%=orderData.products[i].productId.name%>
+                                                </a>
+                                                <div class="order-list__options">
+                                                    <ul class="order-list__options-list">
+                                                        <li class="order-list__options-item"><span class="order-list__options-label">Color:</span>
+                                                            <span class="order-list__options-value"><%=orderData.products[i].productId.color%></span>
+                                                        </li>
+                                                        <li class="order-list__options-item"><span class="order-list__options-label">Size:</span>
+                                                            <span class="order-list__options-value"><%=orderData.products[i].productId.size%></span>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </td>
+                                            <td class="order-list__column-quantity" data-title="Qty:">
+                                                <%=orderData.products[0].quantity%>
+                                            </td>
+                                            <td class="order-list__column-total">
+                                                &#x20B9;
+                                                <%=orderData.products[i].price%>
+                                            </td>
+                                        </tr>
+                                        <%}%>
+
+                                </tbody>
+                                <tbody class="order-list__subtotals">
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="3">Subtotal</th>
+                                        <td class="order-list__column-total">
+                                            &#x20B9;
+                                            <%=sum%>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="3">Shipping</th>
+                                        <td class="order-list__column-total">Free</td>
+                                    </tr>
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="3">Wallet Amount</th>
+
+                                        <%if(orderData.walletAmount){%>
+                                            <td class="order-list__column-total">
+                                                &#x20B9;
+                                                <%=orderData.walletAmount %>
+                                            </td>
+                                            <%}else{%>
+                                                <td class="order-list__column-total">Not Wallet Amount</td>
+                                                <%}%>
+                                    </tr>
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="3">Coupon Discount</th>
+
+                                        <%if(orderData.couponPrice[0].discountedPrice != 0){%>
+                                            <td class="order-list__column-total">
+                                                &#x20B9;
+                                                <%=orderData.couponPrice[0].discountedPrice %>
+                                            </td>
+                                            <%}else{%>
+                                                <td class="order-list__column-total">Not Applied</td>
+                                                <%}%>
+                                    </tr>
+                                </tbody>
+                                <tfoot class="order-list__footer">
+                                    <tr>
+                                        <th class="order-list__column-label" colspan="3">Total</th>
+                                        <td class="order-list__column-total">
+                                            &#x20B9;
+                                            <%=orderData.total%>
+                                        </td>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row mt-3 no-gutters mx-n2">
+                        <div class="col-sm-6 col-12 px-2">
+                            <div class="card address-card">
+                                <div class="address-card__body">
+                                    <div class="address-card__badge
+                                                address-card__badge--muted">Shipping Address
+                                    </div>
+                                    <div class="address-card__name">
+                                        <%=address[0]%>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <%=address[2]%><br><br>
+                                            <%=address[3]%><br><br>
+                                                <%=address[4]%><br><br>
+                                                    <%=address[5]%>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">Phone Number
+                                        </div>
+                                        <div class="address-card__row-content">
+                                            <%=address[1]%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">District</div>
+                                        <div class="address-card__row-content">
+                                            <%=address[6]%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">State/Country</div>
+                                        <div class="address-card__row-content">
+                                            <%=address[7]%>/
+                                                <%=address[8]%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6 col-12 px-2 mt-sm-0 mt-3">
+                            <div class="card address-card">
+                                <div class="address-card__body">
+                                    <div class="address-card__badge
+                                                address-card__badge--muted">Billing Address
+                                    </div>
+                                    <div class="address-card__name">
+                                        <%=address[0]%>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <%=address[2]%><br><br>
+                                            <%=address[3]%><br><br>
+                                                <%=address[4]%><br><br>
+                                                    <%=address[5]%>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">Phone Number
+                                        </div>
+                                        <div class="address-card__row-content">
+                                            <%=address[1]%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">District</div>
+                                        <div class="address-card__row-content">
+                                            <%=address[6]%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">State/Country</div>
+                                        <div class="address-card__row-content">
+                                            <%=address[7]%>/
+                                                <%=address[8]%>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <%- include('../homelayouts/homefoot.ejs')%>

@@ -1,0 +1,114 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li class="active"><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="#">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <!-- <li><span class="icon_search search-switch"></span></li> -->
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <!-- <li><span class="icon_search search-switch"></span></li> -->
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="./index.html"><i class="fa fa-home"></i> Home</a>
+                        <span>Contact</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Contact Section Begin -->
+    <section class="contact spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 col-md-6">
+                    <div class="contact__content">
+                        <div class="contact__address">
+                            <h5>Contact info</h5>
+                            <ul>
+                                <li>
+                                    <h6><i class="fa fa-map-marker"></i> Address</h6>
+                                    <p>Brototype Calicut Room No.III/9, 3rd Floor, SDF Building, Kinfra Techno Industrialpark Calicut University PO, Kakkanchery, Kerala 673635</p>
+                                </li>
+                                <li>
+                                    <h6><i class="fa fa-phone"></i> Phone</h6>
+                                    <p><span>+91 807544186</span></p>
+                                </li>
+                                <li>
+                                    <h6><i class="fa fa-headphones"></i> Support</h6>
+                                    <p>4khilharidas@gmail.com</p>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="contact__form">
+                            <h5>SEND MESSAGE</h5>
+                            <form action="#">
+                                <input type="text" placeholder="Name">
+                                <input type="text" placeholder="Email">
+                                <input type="text" placeholder="Website">
+                                <textarea placeholder="Message"></textarea>
+                                <button type="submit" class="site-btn">Send Message</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6">
+                    <div class="contact__map">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d650.0168973368121!2d75.8932373820449!3d11.151532650560712!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3ba6513d6a79ea8f%3A0xca7fe369546aec60!2sBrototype%20Calicut!5e0!3m2!1sen!2sin!4v1676539326570!5m2!1sen!2sin"
+                            height="780" style="border:0" allowfullscreen="">
+                    </iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section End -->
+
+    <%- include('../homelayouts/homefoot.ejs')%>

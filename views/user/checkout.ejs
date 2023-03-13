@@ -1,0 +1,1018 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <style>
+        /* Helpers */
+        
+        .is-hidden {
+            display: none !important;
+        }
+        
+        .is-desktop {
+            display: block;
+        }
+        
+        @media (max-width: 768px) {
+            .is-desktop {
+                display: none !important;
+            }
+        }
+        
+        .is-mobile {
+            display: none !important;
+        }
+        
+        @media (max-width: 768px) {
+            .is-mobile {
+                display: block !important;
+            }
+        }
+        
+        .announcement {
+            --base-font: inherit;
+            --small-font: 0.75rem;
+            --normal-font: 1rem;
+            --medium-font: 1.25rem;
+            --primary-color: #FA003F;
+            --secondary-color: #fff;
+            --base-padding: 0.5rem;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: var(--primary-color);
+            font-family: var(--base-font-dev), sans-serif;
+            padding: var(--base-padding);
+        }
+        
+        @media (max-width: 768px) {
+            .announcement {
+                flex-direction: column-reverse;
+                position: fixed;
+                left: 0;
+                bottom: 0;
+                width: 100%;
+                z-index: 4;
+            }
+        }
+        /* Removes the announcement on Print */
+        
+        @media print {
+            .announcement {
+                display: none;
+            }
+        }
+        
+        .announcement .text {
+            padding: 0 1rem;
+            color: var(--secondary-color);
+        }
+        
+        @media (max-width: 768px) {
+            .announcement .text {
+                padding-bottom: var(--base-padding);
+            }
+        }
+        
+        .announcement input,
+        .announcement button {
+            font-family: var(--base-font);
+            font-size: var(--small-font);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            padding: var(--base-padding);
+            border: 2px dashed var(--secondary-color);
+            /* height: 36px; */
+        }
+        
+        .announcement input {
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            text-align: center;
+            border-right: 0;
+            font-size: 16px;
+        }
+        
+        .announcement button {
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            cursor: pointer;
+            box-shadow: none;
+            border-radius: 0;
+            font-size: 1rem;
+        }
+        
+        .announcement #timer {
+            /* font-weight: bold; */
+            background: var(--secondary-color);
+            color: var(--primary-color);
+            padding: var(--base-padding);
+            margin-left: 1rem;
+            width: 150px;
+            text-align: center;
+            border: 1px dashed var(--secondary-color);
+            margin-right: 2.5rem;
+            line-height: 1.3;
+        }
+        
+        .announcement .coupon {
+            display: flex;
+            align-items: center;
+        }
+        
+        @media (max-width: 768px) {
+            .announcement .coupon {
+                margin: 1rem auto;
+            }
+        }
+        /* Style the close button (span) */
+        
+        .announcement .close {
+            cursor: pointer;
+            position: absolute;
+            top: -3rem;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 0;
+            background: var(--primary-color);
+            color: var(--secondary-color);
+            height: 35px;
+            width: 35px;
+            line-height: 35px;
+            text-align: center;
+            border-radius: 50%;
+        }
+        
+        @media (min-width: 769px) {
+            .announcement .close {
+                top: 50%;
+                transform: translateY(-50%);
+                border-radius: 50%;
+                left: inherit;
+                right: 0.5rem;
+                background: var(--secondary-color);
+                color: var(--primary-color);
+            }
+        }
+        
+        .announcement .tooltip {
+            position: relative;
+            display: inline-block;
+            color: var(--secondary-color);
+            opacity: 1;
+            line-height: inherit;
+            font-size: inherit;
+            z-index: inherit;
+        }
+        
+        .announcement .tooltip .tooltiptext {
+            visibility: hidden;
+            position: absolute;
+            bottom: 130%;
+            left: 50%;
+            background-color: #555;
+            color: #fff;
+            width: 170px;
+            font-size: smaller;
+            /* font-weight: bold; */
+            text-align: center;
+            border-radius: 6px;
+            padding: 5px;
+            margin-left: -75px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1;
+        }
+        
+        .announcement .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            bottom: -100%;
+        }
+        
+        .announcement .tooltip .tooltiptext::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: #555 transparent transparent transparent;
+            top: -35%;
+            transform: rotate(180deg);
+        }
+        
+        @media (max-width: 768px) {
+            .announcement .tooltip:hover .tooltiptext {
+                bottom: 150%;
+            }
+            .announcement .tooltip .tooltiptext::after {
+                top: 100%;
+                transform: rotate(0deg);
+            }
+        }
+    </style>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !=='undefined' ){%>
+                    <a href="/profile">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData=='undefined' ){%>
+                <ul class="header__right__widget">
+                    <!-- <li><span class="icon_search search-switch"></span></li> -->
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+          </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+          </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <!-- <li><span class="icon_search
+                                                search-switch"></span></li> -->
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+            <div class="tip">
+              <%=wishlistcount%>
+            </div>
+          </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+            <div class="tip">
+              <%=cartcount%>
+            </div>
+          </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <%if(bestCoupon){%>
+        <div class="announcement" id="announcement">
+            <span class="close">&#x2715;</span>
+            <div class="text">
+                <span class="is-desktop">
+                <strong>PROMOTION</strong>. Get &#x20B9;<%=parseInt(bestCoupon.maxDiscount)%> Discount now .<%=bestCoupon.percentage%>% Coupon  . Use Coupon
+            </span>
+                <span class="is-mobile">Use Coupon Code for <strong>50% OFF</strong></span>
+            </div>
+            <div class="coupon">
+                <input type="text" value="<%=bestCoupon.name%>" id="couponCode" readonly />
+                <div class="tooltip">
+                    <button onclick="myFunction()" onmouseout="outFunc()">
+                    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                    Copy
+                </button>
+                </div>
+            </div>
+        </div>
+        <%}%>
+            <!-- Breadcrumb Begin -->
+            <div class="breadcrumb-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="breadcrumb__links">
+                                <a href="/"> Home</a>
+                                <a href="/cart"> Cart</a>
+                                <span>Checkout</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Breadcrumb End -->
+            <div style="display: flex;
+  justify-content: center;
+  align-items: center; margin-top: 25px;">
+                <%if(address.length != 0 ){%>
+                    <button type="submit" class="site-btn" id="toggle-btn"> Select your address here</button>
+                    <%}%>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <%if(bestCoupon){%>
+                                    <div class="discount__content" style="margin-left: 500px;" id="added">
+                                        <article>
+                                            <input type="text" placeholder="Enter your coupon code" id="couponcode">
+                                            <button type="button" onclick="addCoupon()" class="site-btn">Apply</button>
+                                        </article>
+                                    </div>
+                                    <div class="discount__content" style="margin-left: 500px; display: none;" id="cancelcoupon">
+                                        <article>
+                                            <input type="text" placeholder="Enter your coupon code" id="couponcode2">
+                                            <button type="button" onclick="removeCoupon()" class="site-btn">Cancel</button>
+                                        </article>
+                                    </div>
+                                    <%}%>
+                            </div>
+                        </div>
+            </div>
+
+
+            <div class="col-12 mt-4 lg-3" id="my-div" style="display:none;">
+                <div class="addresses-list" style="overflow-y: scroll; max-height: 430px;">
+                    <%if(address.length != 0 ){%>
+                        <% for(let i=0 ; i<address.length;i++){%>
+                            <div class="addresses-list__item card address-card">
+                                <input type="radio" name="address" value="<%=i+1%>" id="divRadio<%=i+1%>" onclick="getDivContent()" style="height: 22px;
+    width: 60px;
+    margin-top: 15px; background-color: aqua;">
+                                <div class="address-card__body">
+                                    <div class="address-card__name">
+                                        <span id="adname<%=i+1%>"><%=address[i].name%></span>
+
+                                    </div>
+                                    <div class="address-card__row">
+                                        <span id="adhome<%=i+1%>"><%=address[i].home%></span>&emsp;&#44;&emsp;
+                                        <span id="adstreet<%=i+1%>"><%=address[i].street%></span>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <span id="adcity<%=i+1%>"><%=address[i].city%></span>&emsp;&#44;&emsp;
+                                        <span id="adzip<%=i+1%>"><%=address[i].zip%></span>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">Phone Number
+                                        </div>
+                                        <div class="address-card__row-content" id="admob<%=i+1%>">
+                                            <%=address[i].mobile%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">District</div>
+                                        <div class="address-card__row-content" id="addis<%=i+1%>">
+                                            <%=address[i].district%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">State</div>
+                                        <div class="address-card__row-content" id="adstate<%=i+1%>">
+                                            <%=address[i].state%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__row">
+                                        <div class="address-card__row-title">Country</div>
+                                        <div class="address-card__row-content" id="adcountry<%=i+1%>">
+                                            <%=address[i].country%>
+                                        </div>
+                                    </div>
+                                    <div class="address-card__footer"><a href="/edit_address?id=<%=address[i]._id%>" id="editaddress">Edit</a>&nbsp;&nbsp;
+                                        <a onclick="removeAddress('<%=address[i]._id%>')" id="removeaddress" style="cursor: pointer;">Remove</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="addresses-list__divider"></div>
+                            <%}%>
+                                <%}%>
+                </div>
+            </div>
+            <!-- Checkout Section Begin -->
+            <section class="checkout spad">
+                <div class="container">
+                    <form action="" class="checkout__form" id="checkout__form">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <h5>Billing detail</h5>
+                                <div class="row">
+                                    <div class="col-lg-6
+                                                            col-md-6 col-sm-6">
+                                        <div class="checkout__form__input">
+                                            <p>First Name
+                                                <span>*</span>
+                                            </p>
+                                            <input type="text" value="" name="name" id="adname" required>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6
+                                                            col-md-6 col-sm-6">
+                                        <div class="checkout__form__input">
+                                            <p>Phone <span>*</span></p>
+                                            <input type="text" name="mobile" value="" id="admob" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12">
+                                        <div class="checkout__form__input">
+                                            <p>Home/Building<span>*</span></p>
+                                            <input type="text" placeholder="" name="home" id="adhome" value="" required>
+                                            <p>Street<span>*</span></p>
+                                            <input type="text" placeholder="" id="adstreet" name="street" value="" required>
+                                        </div>
+                                        <div class="checkout__form__input">
+                                            <p>Town/City
+                                                <span>*</span>
+                                            </p>
+                                            <input type="text" name="city" value="" id="adcity" required>
+                                            <p>District
+                                                <span>*</span>
+                                            </p>
+                                            <input type="text" name="district" value="" id="addis" required>
+                                        </div>
+
+                                        <div class="checkout__form__input">
+                                            <p>Postcode/Zip
+                                                <span>*</span>
+                                            </p>
+                                            <input type="text" name="zip" value="" id="adzip" required>
+                                        </div>
+                                        <div class="checkout__form__input">
+                                            <p>State <span>*</span></p>
+                                            <input type="text" name="state" value="" id="adstate" required>
+                                        </div>
+                                        <div class="checkout__form__input">
+                                            <p>Country
+                                                <span>*</span>
+                                            </p>
+                                            <input type="text" name="country" value="" id="adcountry" required>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+
+
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="checkout__order">
+                                    <h5>Your order</h5>
+                                    <div class="checkout__order__product">
+                                        <ul>
+                                            <li>
+                                                <span class="top__text">Product</span>
+                                                <span class="top__text__right">Total</span>
+                                            </li>
+
+                                            <% for(let i=0 ; i<productData.length;i++){%>
+                                                <li>
+                                                    <%= i+1 %>.
+                                                        <%=productData[i].name%>(
+                                                            <%=data1[i].quantity%>)<span>
+                  <%=data1[i].price %>
+                </span>
+                                                </li>
+                                                <% } %>
+                                        </ul>
+                                    </div>
+                                    <div class="checkout__order__total">
+                                        <ul>
+                                            <li>Subtotal<span>
+                  <%=sum%>
+                </span></li>
+                                            <li>Delivery charges
+                                                <span>Free</span>
+                                            </li>
+                                            <li>Discount<span id="discountamount">Not
+                  Applied</span></li>
+                                            <%let price1=0 ; for(let i=0; i < data1.length; i++){price1 +=data1[i].price;}%>
+                                                <li>Total<span id="total-order">&#x20B9;
+                                                <%= price1 %>
+                                            </span>
+                                                </li>
+                                                <input type="hidden" id="total-checkout" value="<%=sum%>" name="total">
+                                                <input type="hidden" id="walletAmount" value="<%=userData.wallet%>">
+                                        </ul>
+                                    </div>
+                                    <%if( userData.wallet!=0 ){%>
+                                        <div class="checkout__input__widget">
+                                            <label for="payment" style="font-weight: 500;"><input type="checkbox" name="wallet" value="zero" id="wallet-payment" >
+                                        Use Wallet Balance - <span style="color: rgb(14, 163, 14); font-weight: 600;" id="updateWallet">&#x20B9;&nbsp;<%=userData.wallet%></span>
+                                        
+                                        <input type="hidden" name="paymentMethod" value="walletpayment" id="check">
+                                        <span class="checkmark"></span>
+                                    </label>
+                                        </div>
+                                        <%}%>
+                                            <div class="checkout__order__widget" id="paymentselect">
+                                                <label for="check-payment">Online Payment<input type="radio" name="paymentMethod" value="Onlinepayment" id="check-payment">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                                <label for="paypal">Cash on Delivery<input type="radio" name="paymentMethod" value="CashOnDelivery" id="paypal"><span class="checkmark"></span></label>
+                                            </div>
+                                            <button type="submit" class="site-btn">Placeorder</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Checkout Section End -->
+            <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+            <script>
+                $('#checkout__form').submit((e) => {
+                    const online = document.getElementById('check-payment')
+                    const CashOnDelivery = document.getElementById('paypal')
+                    const wallet = document.getElementById('wallet-payment')
+                    e.preventDefault()
+                    if (online.checked || CashOnDelivery.checked || wallet.checked) {
+                        $.ajax({
+                            url: '/checkout',
+                            method: 'post',
+                            data: $('#checkout__form').serialize(),
+                            success: (response) => {
+                                if (response.codsuccess === true) {
+                                    location.href = '/confirm'
+
+                                } else if (response.codsuccess == 'paymentselect') {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+
+                                    Toast.fire({
+                                        icon: 'warning',
+                                        title: 'Order need a Payment Method'
+                                    })
+                                } else {
+                                    razorpayPayment(response.order)
+
+                                }
+                            }
+                        })
+                    } else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Please select your Payment Method'
+                        })
+                    }
+
+
+                })
+
+
+                function razorpayPayment(order) {
+
+                    var options = {
+                        "key": "rzp_test_FLvgFO3AyWNxpW", // Enter the Key ID generated from the Dashboard
+                        "amount": order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+                        "currency": "INR",
+                        "name": "A D D R E S S",
+                        "description": "Test Transaction",
+                        "image": "/public/img/image (2).png",
+                        "order_id": order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+                        "handler": function(response) {
+                            verifyPayment(response, order)
+                        },
+                        "prefill": {
+                            "name": "Gaurav Kumar",
+                            "email": "gaurav.kumar@example.com",
+                            "contact": "9000090000"
+                        },
+                        "notes": {
+                            "address": "Razorpay Corporate Office"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+                    var rzp1 = new Razorpay(options);
+                    rzp1.open();
+                }
+
+                function verifyPayment(payment, order) {
+
+                    $.ajax({
+                        url: '/verify-payment',
+                        method: 'POST',
+                        contentType: 'application/json',
+                        data: JSON.stringify({
+                            payment: payment,
+                            order: order
+                        }),
+                        success: function(response) {
+
+                            location.href = '/confirm'
+                        },
+                        error: function(jqXHR, textStatus, errorThrown) {
+                            // Handle error response
+                        }
+                    });
+                }
+            </script>
+            <script>
+                var button = document.getElementById("toggle-btn");
+                var div = document.getElementById("my-div");
+
+                button.addEventListener("click", function() {
+                    if (div.style.display === "none") {
+                        div.style.display = "block";
+                        // button.textContent = "Close"
+                    } else {
+                        // button.textContent = "Select Your Address here"
+                        div.style.display = "none";
+                    }
+                });
+
+                const checkbox = document.getElementById("wallet-payment");
+                checkbox.addEventListener('change', () => {
+                    if (checkbox.checked) {
+                        checkbox.value = 1
+                    } else {
+                        checkbox.value = 0
+                    }
+                });
+            </script>
+            <script>
+                function getDivContent() {
+                    var div = document.getElementById("my-div");
+                    div.style.display = "none";
+                    var radios = document.querySelectorAll('input[type="radio"][name="address"]');
+                    for (var i = 0; i < radios.length; i++) {
+                        if (radios[i].checked) {
+
+                            let div = radios[i].value
+                            var id = "adname" + div;
+
+
+                            var div1 = document.getElementById("adname" + div);
+                            var textContent1 = div1.textContent.trim();
+
+                            var div2 = document.getElementById("adhome" + div);
+                            var textContent2 = div2.textContent.trim();
+
+                            var div3 = document.getElementById("adstreet" + div);
+                            var textContent3 = div3.textContent.trim();
+
+                            var div4 = document.getElementById("adcity" + div);
+                            var textContent4 = div4.textContent.trim();
+
+                            var div5 = document.getElementById("adzip" + div);
+                            var textContent5 = div5.textContent.trim();
+
+                            var div6 = document.getElementById("admob" + div);
+                            var textContent6 = div6.textContent.trim();
+
+                            var div7 = document.getElementById("addis" + div);
+                            var textContent7 = div7.textContent.trim();
+
+                            var div8 = document.getElementById("adstate" + div);
+                            var textContent8 = div8.textContent.trim();
+
+                            var div8 = document.getElementById("adcountry" + div);
+                            var textContent9 = div8.textContent.trim();
+
+
+                            const name = document.querySelector('#adname');
+                            const mobile = document.querySelector('#admob');
+                            const street = document.querySelector('#adstreet');
+                            const home = document.querySelector('#adhome');
+                            const city = document.querySelector('#adcity');
+                            const district = document.querySelector('#addis');
+                            const state = document.querySelector('#adstate');
+                            const country = document.querySelector('#adcountry');
+                            const zip = document.querySelector('#adzip');
+
+
+                            name.value = textContent1
+                            mobile.value = textContent6
+                            home.value = textContent2
+                            city.value = textContent4
+                            street.value = textContent3
+                            district.value = textContent7
+                            state.value = textContent8
+                            zip.value = textContent5
+                            country.value = textContent9
+
+                        }
+                    }
+                }
+
+
+                document.addEventListener('DOMContentLoaded', () => {
+
+                    const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+                    if (wishlistAddedMsg) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: wishlistAddedMsg
+                        });
+
+                        // Remove the success message from session storage
+                        sessionStorage.removeItem('wishlistAddedMsg');
+
+                    }
+                });
+
+                function removeAddress(addressId) {
+
+                    $.ajax({
+                        url: `remove_address/${addressId}`,
+                        method: 'get',
+                        success: function(response) {
+                            if (response.success === true) {
+                                sessionStorage.setItem('wishlistAddedMsg', "Address removed Succesfully");
+                                window.location.reload();
+                            }
+                        }
+                    })
+                }
+
+                function addCoupon() {
+                    const walletbox = document.getElementById('wallet-payment');
+                    if (walletbox) {
+                        if (walletbox.checked) {
+                            const paymentdiv = document.getElementById('paymentselect')
+                            paymentdiv.style.display = 'block'
+                            const update = document.getElementById('updateWallet')
+                            const wallet = document.getElementById('walletAmount').value
+                            update.textContent = '₹ ' + wallet
+                            walletbox.checked = false;
+
+                        }
+                    }
+
+                    var couponcode = document.getElementById("couponcode")
+                    var cancelcode = document.getElementById('cancelcoupon')
+                    var addeddiv = document.getElementById('added')
+                    var couponcode2 = document.getElementById('couponcode2')
+                    var coupon = couponcode.value
+                    coupon = coupon.replace(' ', '')
+                    if (coupon) {
+
+                        $.ajax({
+                            url: `coupon_discount/${coupon}`,
+                            method: 'get',
+                            success: function(response) {
+                                if (response.success == 'success') {
+                                    document.getElementById('total-order').textContent = response.discountedPrice
+                                    document.getElementById('total-checkout').value = response.discountedPrice
+                                    document.getElementById('discountamount').textContent = response.discountAmount
+                                        // document.getElementById('announcement').style.display = 'none'
+                                    addeddiv.style.display = 'none'
+                                    cancelcode.style.display = 'inline-block'
+                                    couponcode2.value = coupon
+
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+
+                                    Toast.fire({
+                                        icon: 'success',
+                                        title: 'Coupon Applied Successfully'
+                                    })
+                                } else if (response.success == 'already used') {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+
+                                    Toast.fire({
+                                        icon: 'warning',
+                                        title: 'Coupon Already used'
+                                    })
+                                } else {
+                                    const Toast = Swal.mixin({
+                                        toast: true,
+                                        position: 'top',
+                                        showConfirmButton: false,
+                                        timer: 3000,
+                                        timerProgressBar: true,
+                                        didOpen: (toast) => {
+                                            toast.addEventListener('mouseenter', Swal.stopTimer)
+                                            toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                        }
+                                    })
+
+                                    Toast.fire({
+                                        icon: 'error',
+                                        title: 'Sorry,Invalid Coupon code'
+                                    })
+                                }
+
+                            }
+                        })
+                    } else {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer)
+                                toast.addEventListener('mouseleave', Swal.resumeTimer)
+                            }
+                        })
+
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Please enter a valid input'
+                        })
+                    }
+
+
+                }
+
+                function removeCoupon() {
+
+                    var couponcode = document.getElementById("couponcode")
+                    var cancelcode = document.getElementById('cancelcoupon')
+                    var addeddiv = document.getElementById('added')
+                    var couponcode2 = document.getElementById('couponcode2')
+                    var coupon = couponcode.value
+                    const walletbox = document.getElementById('wallet-payment');
+                    if (walletbox.checked) {
+                        const paymentdiv = document.getElementById('paymentselect')
+                        paymentdiv.style.display = 'block'
+                        const update = document.getElementById('updateWallet')
+                        const wallet = document.getElementById('walletAmount').value
+                        update.textContent = '₹ ' + wallet
+                        walletbox.checked = false;
+
+                    }
+                    $.ajax({
+                        url: `cancel_coupon/${coupon}`,
+                        method: 'get',
+                        success: function(response) {
+                            document.getElementById('total-order').textContent = response.sum
+                            document.getElementById('total-checkout').value = response.sum
+                            document.getElementById('discountamount').textContent = 'Not Applied'
+                            document.getElementById('announcement').style.display = 'none'
+                            document.getElementById('announcement').style.display = 'flex'
+                            addeddiv.style.display = 'inline-block'
+                            cancelcode.style.display = 'none'
+                            couponcode.value = ''
+
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Coupon Cancelled'
+                            })
+                        }
+                    })
+
+                }
+            </script>
+            <script>
+                const walletbox = document.getElementById('wallet-payment');
+                if (walletbox) {
+                    walletbox.addEventListener('change', (event) => {
+                        if (event.target.checked) {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'success',
+                                title: 'Wallet Amount Used'
+                            })
+                            const getwallet = document.getElementById('walletAmount')
+                            const gettotal = document.getElementById('total-checkout')
+                            const apply = document.getElementById('total-order')
+                            const wallet = parseFloat(getwallet.value);
+                            const total = parseFloat(gettotal.value);
+                            if (total <= wallet) {
+                                const orderAmount = 0;
+                                apply.textContent = '₹ ' + orderAmount;
+                                const update = document.getElementById('updateWallet')
+                                update.textContent = '₹ ' + (wallet - total)
+                                const paymentdiv = document.getElementById('paymentselect')
+                                paymentdiv.style.display = 'none'
+                            } else {
+                                const orderAmount = total - wallet;
+                                apply.textContent = '₹ ' + orderAmount;
+                                const update = document.getElementById('updateWallet')
+                                update.textContent = '₹ ' + 0
+                            }
+                        } else {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer)
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer)
+                                }
+                            })
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Wallet Amount Cancelled'
+                            })
+                            const total = document.getElementById('total-checkout').value
+                            const apply = document.getElementById('total-order')
+                            apply.textContent = '₹ ' + total;
+                            const paymentdiv = document.getElementById('paymentselect')
+                            paymentdiv.style.display = 'block'
+                            const update = document.getElementById('updateWallet')
+                            const wallet = document.getElementById('walletAmount').value
+                            update.textContent = '₹ ' + wallet
+                        }
+                    });
+                }
+            </script>
+            <script>
+                // Click to Copy
+                var tooltip = document.getElementById('myTooltip');
+                var copyText = document.getElementById('couponCode');
+
+                function myFunction() {
+                    copyText.select();
+                    copyText.setSelectionRange(0, 99999);
+                    document.execCommand('copy');
+                    tooltip.innerHTML = 'Copied: ' + copyText.value;
+                }
+
+                function outFunc() {
+                    tooltip.innerHTML = 'Copy to clipboard';
+                }
+
+                // Close
+                var closebtns = document.getElementsByClassName(
+                    'close'
+                ); /* Get all elements with class="close" */
+                var i;
+                /* Loop through the elements, and hide the parent, when clicked on */
+                for (i = 0; i < closebtns.length; i++) {
+                    closebtns[i].addEventListener('click', function() {
+                        this.parentElement.style.display = 'none';
+                    });
+                }
+            </script>
+            <%- include( '../homelayouts/homefoot.ejs' )%>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A D D R E S S</title>
+    <link rel="stylesheet" href="/css/mobile.css">
+</head>
+
+<body>
+    <div class="wrapper">
+        <h1 class="main-heading">A D D R E S S</h1>
+        <p class="sub-text">Reset your password</p>
+        <% if(typeof message !=='undefined' ){ %>
+            <p style="color: rgb(0, 190, 0);">
+                <%= message %>
+            </p>
+            <% } %>
+                <div class="message-wrapper" id="messageDiv">
+                    <h6 class="message"></h6>
+                </div>
+                <div class="form-wrapper">
+                    <form id="loginForm" action="/getotp" method="post">
+                        <div class="input-field">
+                            <input type="text" placeholder="Enter your mobile number" name="mobile" autocomplete="off">
+                        </div>
+                        <button class="main-button" type="submit" id="sign-in-button">Send code via SMS</button>
+                    </form>
+                </div>
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,147 @@
+<%- include('../adminlayouts/adminhead.ejs') %>
+<section id="sidebar">
+        <a href="/admin/home" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">Welcome, A D M I N</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="/admin/home">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products">
+                    <i class='bx bxs-shopping-bag'></i>
+                    <span class="text">Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders">
+                    <i class='bx bxs-cart'></i>
+                    <span class="text">Orders</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/customers" id="cust">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/category">
+                    <i class='bx bxs-category'></i>
+                    <span class="text">Category</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/banners">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Banners</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="/admin/coupons">
+                    <i class='bx bxs-purchase-tag'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/setting">
+                    <!-- <i class='bx bxs-cog'></i> -->
+                    <span class=""></span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="">
+                <div class="form-input">
+                <input type="search" placeholder="Search..." name="search" aria-label="search" style="display: none;">
+                <button type="submit" class="search-btn" style="background: none;"><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="" class="">
+                <!-- <i class='bx bxs-bell'></i> -->
+                <span class=""></span>
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Coupons</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="/admin/coupons">Coupons</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a href="/admin/coupons">Coupon Management</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="/admin/coupons">Add Coupon</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="formbold-main-wrapper">
+  <div class="formbold-form-wrapper">
+    <form action="" method="post" style="margin-left: -130px; margin-right: -130px; margin-top: -30px;">
+        <div class="formbold-input-flex">
+          <div>
+              <input type="text"name="name"id="firstname"placeholder=""class="formbold-form-input"/>
+              <label for="firstname" class="formbold-form-label"> Coupen Name </label>
+          </div>
+          <div>
+              <input type="number"name="discount"id="lastname"placeholder=""class="formbold-form-input"/>
+              <label for="lastname" class="formbold-form-label"> Discount Percentage </label>
+          </div>
+        </div>
+
+        <div class="formbold-input-flex">
+            <div>
+              <input type="number"name="max"id="phone"placeholder=""class="formbold-form-input"/>
+              <label for="phone" class="formbold-form-label"> Maximum Discount </label>
+          </div>
+          <div>
+              <input type="number"name="min"id="email"placeholder=""class="formbold-form-input" />
+              <label for="email" class="formbold-form-label"> Minimum Amount </label>
+          </div>
+          
+        </div>           
+          </div>
+        </div>
+          
+        <button class="formbold-btn" type="submit">Add coupon</button>
+        </form>
+                        </div>
+            </div>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <%- include('../adminlayouts/adminfooter.ejs') %>

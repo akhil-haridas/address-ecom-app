@@ -1,0 +1,339 @@
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<!-- Footer Section Begin -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-7">
+                <div class="footer__about">
+                    <div class="footer__logo" style="width: 230px;height: 40px;">
+                        <a href="/"><img src="img/address.png" alt=""></a>
+                    </div>
+                    <p>With the trendiest, freshest, and most unique styles from across India and the world, ADDRESS invites you to express your personal style fearlessly.
+                    </p>
+                    <div class="footer__payment">
+                        <a href="/"><img src="img/payment/payment-1.png" alt=""></a>
+                        <a href="/"><img src="img/payment/payment-2.png" alt=""></a>
+                        <a href="/"><img src="img/payment/payment-3.png" alt=""></a>
+                        <a href="/"><img src="img/payment/payment-4.png" alt=""></a>
+                        <a href="/"><img src="img/payment/payment-5.png" alt=""></a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-5">
+                <div class="footer__widget">
+                    <h6>Quick links</h6>
+                    <ul>
+
+                        <li><a href="/shop">Shop</a></li>
+                        <li><a href="/cart">Cart</a></li>
+                        <li><a href="/contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-2 col-md-3 col-sm-4">
+                <div class="footer__widget">
+                    <h6>Account</h6>
+                    <ul>
+                        <li><a href="/profile">My Account</a></li>
+                        <li>
+                            <a href="/orders">My Orders</a>
+                        </li>
+                        <li><a href="wishlist">Wishlist</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-8 col-sm-8">
+                <div class="footer__newslatter">
+                    <h6>NEWSLETTER</h6>
+                    <form action="#">
+                        <input type="text" placeholder="Email">
+                        <button type="submit" class="site-btn">Subscribe</button>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- Footer Section End -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<!-- Js Plugins -->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="js/jquery.magnific-popup.min.js"></script>
+<script src="js/jquery-ui.min.js"></script>
+<script src="js/mixitup.min.js"></script>
+<script src="js/jquery.countdown.min.js"></script>
+<script src="js/jquery.slicknav.js"></script>
+<script src="js/owl.carousel.min.js"></script>
+<script src="js/jquery.nicescroll.min.js"></script>
+<script>
+    'use strict';
+
+    (function($) {
+
+        /*------------------
+            Preloader
+        --------------------*/
+        $(window).on('load', function() {
+            $(".loader").fadeOut();
+            $("#preloder").delay(200).fadeOut("slow");
+
+            /*------------------
+                Product filter
+            --------------------*/
+            $('.filter__controls li').on('click', function() {
+                $('.filter__controls li').removeClass('active');
+                $(this).addClass('active');
+            });
+            if ($('.property__gallery').length > 0) {
+                var containerEl = document.querySelector('.property__gallery');
+                var mixer = mixitup(containerEl);
+            }
+        });
+
+        /*------------------
+            Background Set
+        --------------------*/
+        $('.set-bg').each(function() {
+            var bg = $(this).data('setbg');
+            $(this).css('background-image', 'url(' + bg + ')');
+        });
+
+        //Search Switch
+        $('.search-switch').on('click', function() {
+            $('.search-model').fadeIn(400);
+        });
+
+        $('.search-close-switch').on('click', function() {
+            $('.search-model').fadeOut(400, function() {
+                $('#search-input').val('');
+            });
+        });
+
+        //Canvas Menu
+        $(".canvas__open").on('click', function() {
+            $(".offcanvas-menu-wrapper").addClass("active");
+            $(".offcanvas-menu-overlay").addClass("active");
+        });
+
+        $(".offcanvas-menu-overlay, .offcanvas__close").on('click', function() {
+            $(".offcanvas-menu-wrapper").removeClass("active");
+            $(".offcanvas-menu-overlay").removeClass("active");
+        });
+
+        /*------------------
+		Navigation
+	--------------------*/
+        $(".header__menu").slicknav({
+            prependTo: '#mobile-menu-wrap',
+            allowParentLinks: true
+        });
+
+        /*------------------
+            Accordin Active
+        --------------------*/
+        $('.collapse').on('shown.bs.collapse', function() {
+            $(this).prev().addClass('active');
+        });
+
+        $('.collapse').on('hidden.bs.collapse', function() {
+            $(this).prev().removeClass('active');
+        });
+
+        /*--------------------------
+            Banner Slider
+        ----------------------------*/
+        $(".banner__slider").owlCarousel({
+            loop: true,
+            margin: 0,
+            items: 1,
+            dots: true,
+            smartSpeed: 1200,
+            autoHeight: false,
+            autoplay: true
+        });
+
+        /*--------------------------
+            Product Details Slider
+        ----------------------------*/
+        $(".product__details__pic__slider").owlCarousel({
+            loop: false,
+            margin: 0,
+            items: 1,
+            dots: false,
+            nav: true,
+            navText: ["<i class='arrow_carrot-left'></i>", "<i class='arrow_carrot-right'></i>"],
+            smartSpeed: 1200,
+            autoHeight: false,
+            autoplay: false,
+            mouseDrag: false,
+            startPosition: 'URLHash'
+        }).on('changed.owl.carousel', function(event) {
+            var indexNum = event.item.index + 1;
+            product_thumbs(indexNum);
+        });
+
+        function product_thumbs(num) {
+            var thumbs = document.querySelectorAll('.product__thumb a');
+            thumbs.forEach(function(e) {
+                e.classList.remove("active");
+                if (e.hash.split("-")[1] == num) {
+                    e.classList.add("active");
+                }
+            })
+        }
+
+
+        /*------------------
+		Magnific
+    --------------------*/
+        $('.image-popup').magnificPopup({
+            type: 'image'
+        });
+
+
+        $(".nice-scroll").niceScroll({
+            cursorborder: "",
+            cursorcolor: "#dddddd",
+            boxzoom: false,
+            cursorwidth: 5,
+            background: 'rgba(0, 0, 0, 0.2)',
+            cursorborderradius: 50,
+            horizrailenabled: false
+        });
+
+        /*------------------
+            CountDown
+        --------------------*/
+        // For demo preview start
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        if (mm == 12) {
+            mm = '01';
+            yyyy = yyyy + 1;
+        } else {
+            mm = parseInt(mm) + 1;
+            mm = String(mm).padStart(2, '0');
+        }
+        var timerdate = mm + '/' + dd + '/' + yyyy;
+        // For demo preview end
+
+
+        // Uncomment below and use your date //
+
+        /* var timerdate = "2020/12/30" */
+
+        $("#countdown-time").countdown(timerdate, function(event) {
+            $(this).html(event.strftime("<div class='countdown__item'><span>%D</span> <p>Day</p> </div>" + "<div class='countdown__item'><span>%H</span> <p>Hour</p> </div>" + "<div class='countdown__item'><span>%M</span> <p>Min</p> </div>" + "<div class='countdown__item'><span>%S</span> <p>Sec</p> </div>"));
+        });
+
+        /*-------------------
+		Range Slider
+	--------------------- */
+        var rangeSlider = $(".price-range"),
+            minamount = $("#minamount"),
+            maxamount = $("#maxamount"),
+            minPrice = rangeSlider.data('min'),
+            maxPrice = rangeSlider.data('max');
+        rangeSlider.slider({
+            range: true,
+            min: minPrice,
+            max: maxPrice,
+            values: [minPrice, maxPrice],
+            slide: function(event, ui) {
+                minamount.val('₹' + ui.values[0]);
+                maxamount.val('₹' + ui.values[1]);
+            }
+        });
+        minamount.val('₹' + rangeSlider.slider("values", 0));
+        maxamount.val('₹' + rangeSlider.slider("values", 1));
+
+        /*------------------
+		Single Product
+	--------------------*/
+        $('.product__thumb .pt').on('click', function() {
+            var imgurl = $(this).data('imgbigurl');
+            var bigImg = $('.product__big__img').attr('src');
+            if (imgurl != bigImg) {
+                $('.product__big__img').attr({
+                    src: imgurl
+                });
+            }
+        });
+
+        /*-------------------
+		Quantity change
+	--------------------- */
+        var proQty = $('.pro-qty');
+        proQty.on('click', '.qtybtn', function() {
+            var $button = $(this);
+            var oldValue = $button.parent().find('input').val();
+            var inputVal = document.getElementById("maxQTY").value;
+            var inputValue = parseFloat(inputVal);
+
+            if ($button.hasClass('inc')) {
+
+                var newVal = parseFloat(oldValue) + 1
+                if (oldValue < inputValue) {
+                    var newVal = parseFloat(oldValue) + 1;
+                } else {
+                    var newVal = parseFloat(oldValue)
+
+                }
+
+            } else {
+                // Don't allow decrementing below zero
+                if (oldValue > 1) {
+                    var newVal = parseFloat(oldValue) - 1;
+                } else {
+                    newVal = 1;
+                }
+            }
+            $button.parent().find('input').val(newVal);
+        });
+
+
+        /*-------------------
+		Radio Btn
+	--------------------- */
+        $(".size__btn label").on('click', function() {
+            $(".size__btn label").removeClass('active');
+            $(this).addClass('active');
+        });
+
+    })(jQuery);
+
+    var btnUpload = $("#upload_file"),
+        btnOuter = $(".button_outer");
+    btnUpload.on("change", function(e) {
+        var ext = btnUpload.val().split('.').pop().toLowerCase();
+        if ($.inArray(ext, ['gif', 'png', 'jpg', 'jpeg']) == -1) {
+            $(".error_msg").text("Not an Image...");
+        } else {
+            $(".error_msg").text("");
+            btnOuter.addClass("file_uploading");
+            setTimeout(function() {
+                btnOuter.addClass("file_uploaded");
+            }, 3000);
+            var uploadedFile = URL.createObjectURL(e.target.files[0]);
+            setTimeout(function() {
+                $("#uploaded_view").append('<img src="' + uploadedFile + '" />').addClass("show");
+            }, 3500);
+        }
+    });
+    $(".file_remove").on("click", function(e) {
+        $("#uploaded_view").removeClass("show");
+        $("#uploaded_view").find("img").remove();
+        btnOuter.removeClass("file_uploading");
+        btnOuter.removeClass("file_uploaded");
+    });
+</script>
+</body>
+
+</html>

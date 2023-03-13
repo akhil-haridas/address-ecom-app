@@ -1,0 +1,270 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="/profile">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <!-- <li><span class="icon_search search-switch"></span></li> -->
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <!-- <li><span class="icon_search search-switch"></span></li> -->
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <span>Shopping cart</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Shop Cart Section Begin -->
+    <section class="shop-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="shop__cart__table">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Price</th>
+                                    <th>Quantity</th>
+                                    <th>Total</th>
+                                    <th></th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% if(productData.length > 0){
+                                for(let i=0 ;i < productData.length;i++){
+                                    %>
+                                    <tr>
+                                        <td class="cart__product__item">
+                                            <div style="width: 60px;"><img src="/products_img/<%= productData[i].image[0]%>" alt="" style="background-size: contain;"></div>
+                                            <div class="cart__product__item__title">
+                                                <a href="/product?id=<%=productData[i]._id%>">
+                                                    <h6>
+                                                        <%=productData[i].name%>
+                                                    </h6>
+                                                </a>
+                                                <div class="rating">
+                                                    <% for(let j=0; j < Math.round(productData[i].rating); j++) { %>
+                                                        <i class="fa fa-star"></i>
+                                                        <% } %>
+
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td class="cart__price">&#x20B9;
+                                            <%=productData[i].offerPrice%>
+                                        </td>
+                                        <td class="cart__quantity">
+
+                                            <div class="pro-qty">
+                                                <span class="dec qtybtn" onclick="decrement('<%=productData[i]._id%>')">-</span>
+                                                <input type="text" id="<%=productData[i]._id%>" name="quantity" value="<%=data1[i].quantity%>" disabled>
+                                                <span class="inc qtybtn" onclick="increment('<%=productData[i]._id%>')">+</span>
+                                                <input id="maxQTY" value="<%=productData[i].stock%>" hidden>
+
+                                            </div>
+                                        </td>
+                                        <td class="cart__total" id="total-<%=productData[i]._id%>">
+                                            <%=data1[i].price %>
+
+                                        </td>
+                                        <td class="cart__close"><a onclick="removeCart('<%=productData[i]._id%>')"><span class="icon_close"></span></a>
+                                        </td>
+                                    </tr>
+                                    <%
+                        }
+                    }else{
+                        %>
+                                        <tr>
+                                            <td>
+                                                <h4>Currently no cart items....</h4>
+                                            </td>
+                                        </tr>
+                                        <%
+                    }
+                    %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <%if( productData != 0 ){%>
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+
+                    <div class="discount__content">
+
+                    </div>
+                </div>
+                <div class="col-lg-4 offset-lg-2">
+                    <div class="cart__total__procced">
+                        <h6>Cart total</h6>
+                        <ul>
+                            <%let price = 0 ; for(let i = 0; i < data1.length; i++){price += data1[i].price;}%>
+                                <li>Subtotal <span id="total-price">&#x20B9;<%= price %></span></li>
+                                <li>Delivery charges<span>Free</span></li>
+
+                                <%let price1 = 0 ; for(let i = 0; i < data1.length; i++){price1 += data1[i].price;}%>
+                                    <li>Total<span id="total-order">&#x20B9;
+                                            <%= price1 %>
+                                                </span>
+                                    </li>
+                        </ul>
+                        <a href="/checkout" style="text-decoration: none;" class="primary-btn">Proceed to checkout</a>
+                    </div>
+                </div>
+            </div>
+            <%}%>
+        </div>
+    </section>
+    <!-- Shop Cart Section End -->
+    <script>
+        //Increment qty and update price using Ajax
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+            if (wishlistAddedMsg) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'warning',
+                    title: wishlistAddedMsg
+                });
+
+                // Remove the success message from session storage
+                sessionStorage.removeItem('wishlistAddedMsg');
+
+            }
+        });
+
+        function increment(productId) {
+
+            $.ajax({
+                url: `cart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        document.getElementById(`total-${productId}`).textContent = response.updatedPrice
+                        document.getElementById('total-price').textContent = response.sum
+                        document.getElementById('total-order').textContent = response.sum
+                        document.getElementById('maxQTY').value = response.maxQty
+                    } else {
+                        sessionStorage.setItem('wishlistAddedMsg', "Sorry,Maximum Quantity Reached");
+                        window.location.reload();
+                    }
+
+
+
+                }
+            })
+
+        }
+
+        //Decrement qty and update price using Ajax
+
+        function decrement(productId) {
+
+            const qty = document.getElementById(productId)
+            const currentQty = qty.value
+
+            if (currentQty > 1) {
+                $.ajax({
+                    url: `cart/${productId}`,
+                    method: 'post',
+                    success: function(response) {
+                        document.getElementById(`total-${productId}`).textContent = response.updatedPrice
+                        document.getElementById('total-price').textContent = response.sum
+                        document.getElementById('total-order').textContent = response.sum
+                    }
+                })
+            } else {
+                sessionStorage.setItem('wishlistAddedMsg', "Sorry,You can't do that");
+                window.location.reload();
+            }
+
+        }
+
+        function removeCart(productId) {
+
+            $.ajax({
+                url: `removecart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        sessionStorage.setItem('wishlistAddedMsg', "Removed from Cart");
+                        window.location.reload()
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+    </script>
+    <%- include('../homelayouts/homefoot.ejs')%>

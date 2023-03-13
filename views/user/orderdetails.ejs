@@ -1,0 +1,350 @@
+<%- include('../homelayouts/homehead.ejs')%>
+
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !=='undefined' ){%>
+                    <a href="/profile" style="color: #ca1515; font-weight: 800;">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData=='undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+          </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+          </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search
+                        search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+            <div class="tip">
+              <%=wishlistcount%>
+            </div>
+          </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+            <div class="tip">
+              <%=cartcount%>
+            </div>
+          </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option" style="margin-bottom:
+                10px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa
+                            fa-home"></i> Home</a>
+                        <span>Checkout</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+    <div class="col-12 col-lg-9 mt-4 mt-lg-0" style="max-width:
+                100%;">
+        <div class="card">
+            <div class="order-header">
+                <h5 class="order-header__title">Order #
+                    <%=orderData._id%>
+                </h5>
+                <div class="order-header__subtitle">Was confirmed on <mark class="order-header__date">
+          <%=orderData.date%>
+        </mark> and is currently <mark class="order-header__status">
+          <%=orderData.orderStatus%>
+        </mark>.
+                    <%if(orderData.orderStatus !="Cancelled" && orderData.orderStatus !="Delivered" && orderData.orderStatus !="Returned" ){%>
+                        <a onclick="cancelOrder('<%=orderData._id%>')"><button class="site-btn" style="float: right; margin-top: -35px;">Cancel Order</button></a>
+                        <%}else{%>
+                            <%if(orderData.orderStatus !="Returned" && orderData.orderStatus !="Cancelled"){%>
+                                <a onclick="returnOrder('<%=orderData._id%>')"><button class="site-btn" style="float: right; margin-top: -35px;">Return Order</button></a>
+                                <%}%>
+                                    <%}%>
+                </div>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-table">
+                <div class="table-responsive-sm">
+                    <table id="ordertable">
+                        <thead>
+                            <tr>
+                                <th class="order-list__column-total"></th>
+                                <th>Product</th>
+                                <th class="order-list__column-total">Total</th>
+                            </tr>
+                        </thead>
+                        <tbody class="card-table__body
+                                card-table__body--merge-rows">
+                            <% for(let i=0 ;i
+                                <orderData.products.length;i++){%>
+                                <tr>
+                                    <td class="order-list__column-image">
+                                        <div class="product-image"><a href="" class="product-image__body"><img class="product-image__img"
+                src="/products_img/<%=orderData.products[i].productId.image[0]%>" alt=""></a></div>
+                                    </td>
+                                    <td>
+                                        <%=orderData.products[i].productId.name%>
+                                            ×
+                                            <%=orderData.products[i].quantity%>
+                                    </td>
+                                    <td class="order-list__column-total">
+                                        &#x20B9;
+                                        <%=orderData.products[i].price%>
+                                    </td>
+                                </tr>
+                                <% } %>
+                        </tbody>
+                        <tbody class="card-table__body
+                                          card-table__body--merge-rows">
+                            <tr>
+
+                                <th style="width: 181px;">Subtotal</th>
+                                <th></th>
+                                <td class="order-list__column-total">
+                                    &#x20B9;
+                                    <%=sum%>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th style="width: 181px;">Shipping</th>
+                                <th></th>
+                                <td class="order-list__column-total">Free</td>
+                            </tr>
+                            <tr>
+                                <th style="width: 181px;">Coupon Discount</th>
+                                <th></th>
+                                <%if(orderData.couponPrice[0].discountedPrice != 0){%>
+                                    <td class="order-list__column-total">
+                                        &#x20B9;
+                                        <%=orderData.couponPrice[0].discountedPrice %>
+                                    </td>
+                                    <%}else{%>
+                                        <td class="order-list__column-total">Not Applied</td>
+                                        <%}%>
+                            </tr>
+                            <tr>
+                                <th style="width: 181px;">Wallet Amount</th>
+                                <th></th>
+                                <%if(orderData.walletAmount){%>
+                                    <td class="order-list__column-total">
+                                        &#x20B9;
+                                        <%=orderData.walletAmount %>
+                                    </td>
+                                    <%}else{%>
+                                        <td class="order-list__column-total">Not Wallet Amount</td>
+                                        <%}%>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th style="width: 350px;">Total (
+                                    <%=orderData.paymentMethod%>)</th>
+                                <th></th>
+                                <td class="order-list__column-total">
+                                    &#x20B9;
+                                    <%=orderData.total%>
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row mt-3 no-gutters mx-n2">
+            <div class="col-sm-6 col-12 px-2 card address-card address-card--featured">
+
+                <div class="address-card__body">
+                    <div class="address-card__badge address-card__badge--muted">Billing Address
+                    </div>
+                    <div class="address-card__name">
+                        <%=address[0]%>
+                    </div>
+                    <div class="address-card__row">
+                        <%=address[2]%><br><br>
+                            <%=address[3]%><br><br>
+                                <%=address[4]%><br><br>
+                                    <%=address[5]%>
+                    </div>
+                    <div class="address-card__row">
+                        <div class="address-card__row-title">Phone Number
+                        </div>
+                        <div class="address-card__row-content">
+                            <%=address[1]%>
+                        </div>
+                    </div>
+                    <div class="address-card__row">
+                        <div class="address-card__row-title">District</div>
+                        <div class="address-card__row-content">
+                            <%=address[6]%>
+                        </div>
+                    </div>
+                    <div class="address-card__row">
+                        <div class="address-card__row-title">State/Country</div>
+                        <div class="address-card__row-content">
+                            <%=address[7]%>/
+                                <%=address[8]%>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-sm-6 col-12 px-2 mt-sm-0 mt-3">
+                <div class="card address-card address-card--featured">
+
+
+                    <div class="address-card__body">
+                        <div class="address-card__badge address-card__badge--muted">Shipping Address
+                        </div>
+                        <div class="address-card__name">
+                            <%=address[0]%>
+                        </div>
+                        <div class="address-card__row">
+                            <%=address[2]%><br><br>
+                                <%=address[3]%><br><br>
+                                    <%=address[4]%><br><br>
+                                        <%=address[5]%>
+                        </div>
+                        <div class="address-card__row">
+                            <div class="address-card__row-title">Phone Number
+                            </div>
+                            <div class="address-card__row-content">
+                                <%=address[1]%>
+                            </div>
+                        </div>
+                        <div class="address-card__row">
+                            <div class="address-card__row-title">District</div>
+                            <div class="address-card__row-content">
+                                <%=address[6]%>
+                            </div>
+                        </div>
+                        <div class="address-card__row">
+                            <div class="address-card__row-title">State/Country</div>
+                            <div class="address-card__row-content">
+                                <%=address[7]%>/
+                                    <%=address[8]%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+            if (wishlistAddedMsg) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: wishlistAddedMsg
+                });
+
+                // Remove the success message from session storage
+                sessionStorage.removeItem('wishlistAddedMsg');
+
+            }
+        });
+
+
+        function cancelOrder(orderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Cancel Order!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `cancel_order/${orderId}`,
+                        method: 'get',
+                        success: function(response) {
+                            if (response.success === true) {
+                                sessionStorage.setItem('wishlistAddedMsg', "Order Cancelled");
+                                window.location.reload();
+                            }
+                        }
+                    })
+                }
+            })
+
+        }
+
+        function returnOrder(orderId) {
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Return Order!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: `return_order/${orderId}`,
+                        method: 'get',
+                        success: function(response) {
+                            if (response.success === true) {
+
+                                sessionStorage.setItem('wishlistAddedMsg', 'Order Returned')
+                                window.location.reload();
+                            } else {
+                                sessionStorage.setItem('wishlistAddedMsg', 'You can only return the product within 7 days of receiving it ')
+                                window.location.reload();
+
+                            }
+                        }
+                    })
+                }
+            })
+
+        }
+    </script>
+    <%-include('../homelayouts/homefoot.ejs')%>

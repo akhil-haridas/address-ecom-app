@@ -1,0 +1,415 @@
+<%- include('../adminlayouts/adminhead.ejs') %>
+    <style>
+        .section {
+            position: relative;
+            /* height: 55vh; */
+            height: 50px;
+            margin-bottom: -15px;
+            margin-top: 15px;
+        }
+        
+        .section .section-center {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            -webkit-transform: translateY(-50%);
+            transform: translateY(-50%)
+        }
+        
+        #booking {
+            font-family: 'Raleway', sans-serif
+        }
+        
+        .booking-form {
+            position: relative;
+            width: 100%;
+            margin: auto;
+            padding: 0px;
+            overflow: hidden;
+            border-radius: 25px;
+        }
+        
+        .booking-form::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 0;
+            background: rgba(255, 255, 255, 0);
+            z-index: -1
+        }
+        
+        .booking-form .form-header {
+            position: relative;
+        }
+        
+        .booking-form .form-header h1 {
+            font-weight: 200;
+            text-transform: capitalize;
+            font-size: 20px;
+            margin: 0px;
+            color: #fff;
+        }
+        
+        .booking-form .form-group {
+            position: relative;
+            margin-bottom: 30px
+        }
+        
+        .booking-form .form-control {
+            background-color: rgb(255, 255, 255);
+            height: 60px;
+            padding: 0px 25px;
+            border: none;
+            border-radius: 40px;
+            color: #000000;
+            -webkit-box-shadow: 0px 0px 0px 2px transparent;
+            box-shadow: 0px 0px 0px 2px transparent;
+            -webkit-transition: 0.2s;
+            transition: 0.2s
+        }
+        
+        .booking-form .form-control::placeholder {
+            color: rgba(0, 0, 0, 0.5)
+        }
+        
+        .booking-form input[type="date"].form-control {
+            padding-top: 16px
+        }
+        
+        .booking-form input[type="date"].form-control:invalid {
+            color: rgba(0, 0, 0, 0.5)
+        }
+        
+        .booking-form input[type="date"].form-control+.form-label {
+            opacity: 1;
+            top: 10px;
+            margin-left: 20px;
+        }
+        
+        .booking-form .form-label {
+            position: absolute;
+            top: -10px;
+            left: 25px;
+            opacity: 0;
+            color: var(--blue);
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.3px;
+            height: 15px;
+            line-height: 15px;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all
+        }
+        
+        .booking-form .submit-btn {
+            color: #fff;
+            background-color: var(--blue);
+            font-weight: 700;
+            height: 60px;
+            padding: 10px 30px;
+            width: 100%;
+            border-radius: 40px;
+            border: none;
+            text-transform: uppercase;
+            font-size: 16px;
+            letter-spacing: 1.3px;
+            -webkit-transition: 0.2s all;
+            transition: 0.2s all
+        }
+    </style>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="/admin/home" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">Welcome, A D M I N</span>
+        </a>
+        <ul class="side-menu top">
+            <li class="active">
+                <a href="/admin/home">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products">
+                    <i class='bx bxs-shopping-bag'></i>
+                    <span class="text">Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders">
+                    <i class='bx bxs-cart'></i>
+                    <span class="text">Orders</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/customers">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/category">
+                    <i class='bx bxs-category'></i>
+                    <span class="text">Category</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/banners">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Banners</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/coupons">
+                    <i class='bx bxs-purchase-tag'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/setting">
+                    <!-- <i class='bx bxs-cog' type="hidden"></i> -->
+                    <span class="text"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search..." name="search" aria-label="search" style="display: none;">
+                    <button type="submit" style="background: none;" class=""><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="/admin" class="">
+                <i class=''></i>
+                <span class=""></span>
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Sales Analytics</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="/admin/home">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a href="/admin/home">Home</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="/admin/sales_report">Sales Analytics</a>
+                        </li>
+                    </ul>
+                </div>
+                <a class="btn-download" id="toggle-btn" style="cursor: pointer;">
+                    <i class='bx bxs-cloud-download' id="icon"></i>
+                    <span class="text" id="span">Download PDF</span>
+                </a>
+                <div class="table-data" style="margin-top: 0px;">
+                    <div class="order" style="overflow-x: inherit; display: none; " id="order">
+                        <div id="booking" class="section">
+                            <div class="section-center">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="booking-form">
+                                            <form action="/admin/download_report" method="post">
+                                                <div class="row">
+                                                    <div class="col-md-6" style="float: left;">
+                                                        <div class="form-group">
+                                                            <input class="form-control" name="start" style="width: 300px;margin-right: 21px;margin-right: 25px;margin-left: 20px;border: solid 2px;" type="date" required> <span class="form-label">From </span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-6" style="float: left;">
+                                                        <div class="form-group">
+                                                            <input class="form-control" name="end" style="width: 300px; margin-right: 35px;margin-left: 20px;border: solid 2px;" type="date" required> <span class="form-label">To</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-btn"> <button class="submit-btn" type="submit" style="width: 166px; float: left;">Download</button> </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h1>Total Sale Amount&emsp;:&emsp;
+                            <%=totalSale[0].totalSaleAmount%>
+                        </h1>
+                    </div>
+                    <div class="head">
+                        <h4>Delivered Orders Count&emsp;:&emsp;
+                            <%=deliveredCount%>
+                        </h4>
+
+                    </div>
+                    <div class="head">
+                        <h4>Cancelled Orders Count&emsp;:&emsp;
+                            <%=cancelledCount%>
+                        </h4>
+                    </div>
+                    <div class="head">
+                        <h4>Returned Orders Count&emsp;:&emsp;
+                            <%=returnedCount%>
+                        </h4>
+
+                    </div>
+
+                </div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Product Wise Sale</h3>
+                        <!-- <i class='bx bx-search'></i>
+                        <i class='bx bx-filter'></i> -->
+                    </div>
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>Rating</th>
+                                <th>Price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <% for(let i=0 ;i < order.length;i++){%>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <!-- <img src="img/people.png"> -->
+                                        <p>
+                                            <%=order[i].name %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <%= order[i].rating%>
+                                    </td>
+                                    <td>
+                                        <%= order[i].offerPrice%>
+                                    </td>
+                                    <td>
+                                        <%= order[i].total_quantity%>
+                                    </td>
+                                    <td>
+                                        <%= order[i].total_amount%>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                            <% } %>
+                    </table>
+
+                </div>
+
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Customer Wise Sale</h3>
+                        <!-- <i class='bx bx-search'></i>
+                                                <i class='bx bx-filter'></i> -->
+                    </div>
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>Username</th>
+                                <th>Date</th>
+                                <th>Products</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <% for(let i=0 ;i < orders.length;i++){%>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <%=orders[i].userName[0] %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <%= orders[i].date%>
+                                    </td>
+                                    <td>
+                                        <% for(let j=0; j < orders[i].products.length; j++) { %>
+                                            <%= orders[i].products[j] %> x
+                                                <%=orders[i].pqty[j]%>
+                                                    <% } %>
+                                    </td>
+
+                                    <td>
+                                        <% if(orders[i].orderTotal != 0 ){%>
+                                            <%= orders[i].orderTotal%>
+                                                <%}else{%>
+                                                    Wallet
+                                                    <%}%>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                            <% } %>
+                    </table>
+
+                </div>
+
+            </div>
+        </main>
+
+    </section>
+    <script>
+        var button = document.getElementById("toggle-btn");
+        var div = document.getElementById("order");
+        var span = document.getElementById("span");
+        var icon = document.getElementById("icon");
+        button.addEventListener("click", function() {
+            if (div.style.display === "none") {
+                div.style.display = "block";
+                span.textContent = "Close"
+                icon.style.display = "none"
+
+            } else {
+                span.textContent = "Download PDF"
+                div.style.display = "none";
+            }
+        });
+    </script>

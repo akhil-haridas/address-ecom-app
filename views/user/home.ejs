@@ -1,0 +1,467 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li class="active"><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="/profile">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <!-- <li><span class="icon_search search-switch"></span></li> -->
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+          </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+          </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <!-- <li><span class="icon_search search-switch"></span></li> -->
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+            <div class="tip" id="wcount"><%=wishlistcount%></div>
+          </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+            <div class="tip" id="ccount"><%=cartcount%></div>
+          </a></li>
+                    </ul>
+                    <%}%>
+                        </ul>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <!-- Banner Section Begin -->
+    <section class="banner set-bg" data-setbg="/banner_img/<%= banner[1].image%>" id="banner" style="transition: background-image 1.0s ease-in-out;">
+        <div class="container">
+            <div class="row">
+                <div class="col-xl-7 col-lg-8 m-auto">
+                    <div class="banner__slider owl-carousel">
+                        <% for(let i=0 ; i< banner.length;i++){%>
+                            <div class="banner__item">
+                                <div class="banner__text">
+                                    <span><%= banner[i].description%></span>
+                                    <h1>
+                                        <%= banner[i].title%>
+                                    </h1>
+                                    <a href="/shop">Shop now</a>
+                                </div>
+                            </div>
+                            <%}%>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Banner Section End -->
+    <!-- Categories Section Begin -->
+    <section class="categories">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 p-0">
+                    <div class="categories__item categories__large__item set-bg" data-setbg="/category_img/<%= category[0].image%>">
+                        <div class="categories__text">
+                            <h1>
+                                <%= category[0].category%>
+                            </h1>
+                            <p>
+                                <%= category[0].description%>
+                            </p>
+                            <p>
+                                <%=productCount[0].product_count%> items
+                            </p>
+                            <a href="" onclick="selected('1')">Shop now</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="row">
+                        <% for(let i=1 ; i< 5;i++){%>
+                            <div class="col-lg-6 col-md-6 col-sm-6 p-0">
+
+                                <div class="categories__item set-bg" data-setbg="/category_img/<%= category[i].image%>">
+                                    <div class="categories__text" style="margin-top: 180px;">
+                                        <h4>
+                                            <%= category[i].category%>
+                                        </h4>
+                                        <p>
+                                            <%=productCount[i].product_count%> items</p>
+                                        <a href="" onclick="selected('<%=i+1%>')">Shop now</a>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <%  } %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Categories Section End -->
+
+    <!-- Product Section Begin -->
+    <section class="product spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-md-4">
+                    <div class="section-title">
+                        <h4>New products</h4>
+                    </div>
+                </div>
+            </div>
+            <div class="row property__gallery">
+
+                <% for(let i=0 ; i< productData.length;i++){%>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 mix women">
+
+                        <div class="product__item">
+                            <div class="product__item__pic set-bg" data-setbg="/products_img/<%= productData[i].image[0]%>">
+                                <% if(productData[i].stock <= 0){%>
+                                    <div class="label stockout">STOCK OUT</div>
+                                    <%} else if(productData[i].stock <= 15){%>
+                                        <div class="label sale">limited stock</div>
+                                        <%} else if(productData[i] == productData[0]){%>
+                                            <div class="label new">new</div>
+                                            <%}else{%>
+                                                <div class="label yellow">sale</div>
+                                                <%}%>
+                                                    <ul class="product__hover">
+                                                        <li><a href="/products_img/<%=productData[i].image[0]%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+
+
+                                                        <% if(wishlist.includes(productData[i]._id)){ %>
+
+                                                            <li><a onclick="removeWishlist('<%=productData[i]._id%>')" style="background: #ca1515; color: #fff;"><span class="icon_heart_alt"></span></a></li>
+
+                                                            <%}else{%>
+                                                                <li><a onclick="addWishlist('<%=productData[i]._id%>')"><span class="icon_heart_alt"></span></a></li>
+                                                                <%}%>
+
+                                                                    <% if(productData[i].stock != 0){%>
+                                                                        <% if (cartData.find(id=> id == productData[i]._id)) { %>
+                                                                            <li><a onclick="removeCart('<%=productData[i]._id%>')" style="background: #ca1515; color: #fff;"><span class="icon_bag_alt"></span></a>
+                                                                            </li>
+                                                                            <%}else{%>
+                                                                                <li>
+                                                                                    <a onclick="addCart('<%=productData[i]._id%>')"><span class="icon_bag_alt"></span></a>
+                                                                                </li>
+                                                                                <%}%>
+                                                                                    <%}%>
+                                                    </ul>
+                            </div>
+                            <div class="product__item__text">
+                                <h6>
+                                    <a href="/product?id=<%=productData[i]._id%>">
+                                        <%= productData[i].name%>
+                                    </a>
+                                </h6>
+                                <div class="rating">
+                                    <% for(let j=0; j < Math.round(productData[i].rating); j++) { %>
+                                        <i class="fa fa-star"></i>
+                                        <% } %>
+                                </div>
+                                <div class="product__price">&#x20B9;
+                                    <%= productData[i].offerPrice%><span style="color: rgb(183, 0, 0);"><%= productData[i].grossPrice%></span></div>
+                            </div>
+                        </div>
+                    </div>
+                    <%  } %>
+            </div>
+        </div>
+    </section>
+    <!-- Product Section End -->
+
+
+
+
+    <!-- Services Section Begin -->
+    <section class="services spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-car"></i>
+                        <h6>Free Shipping</h6>
+                        <p>For all oder over &#x20B9;500</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-money"></i>
+                        <h6>Money Back Guarantee</h6>
+                        <p>If good have Problems</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-support"></i>
+                        <h6>Online Support 24/7</h6>
+                        <p>Dedicated support</p>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="services__item">
+                        <i class="fa fa-headphones"></i>
+                        <h6>Payment Secure</h6>
+                        <p>100% secure payment</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Services Section End -->
+    <script>
+        function selected(number) {
+            $.ajax({
+                url: `select_category/${number}`,
+                method: 'get',
+                success: function(response) {
+                    const number = response.number;
+                    console.log(number, "dhbjwdc");
+
+                    // Store the selected checkbox value in localStorage
+                    localStorage.setItem('selectedCheckbox', number);
+
+                    // Redirect to the shop page
+                    location.href = '/shop';
+                }
+            });
+        }
+    </script>
+    <script>
+        // select the banner element
+        const banner = document.querySelector('#banner');
+
+        // define an array of image URLs
+        const imageUrls = ['/banner_img/<%= banner[1].image%>', '/banner_img/<%= banner[2].image%>', '/banner_img/<%= banner[0].image%>'];
+
+        // set an index to keep track of the current image
+        let currentImageIndex = 0;
+
+        // set an interval of 30 seconds
+        setInterval(() => {
+            currentImageIndex = (currentImageIndex + 1) % imageUrls.length;
+
+            // create a new Image object to preload the next image
+            const nextImage = new Image();
+            nextImage.src = imageUrls[currentImageIndex];
+
+            // add an onload event handler to switch the background image after the new image has loaded
+            nextImage.onload = () => {
+                banner.style.backgroundImage = `url(${nextImage.src})`;
+            };
+        }, 5000); // 30 seconds in milliseconds
+    </script>
+
+    <script>
+        function addWishlist(productId) {
+            $.ajax({
+                url: `add_wishlist/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        const count = response.count
+                        const wcount = document.getElementById('wcount')
+                        wcount.textContent = count
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added to Wishlist'
+                        });
+
+                    } else if (response.success === 'already') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Already in Wishlist'
+                        });
+                    } else {
+                        location.href = '/signin';
+                    }
+                }
+            });
+        }
+
+
+        function removeWishlist(productId) {
+
+            $.ajax({
+                url: `remove_wishlist/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        const count = response.count
+                        const wcount = document.getElementById('wcount')
+                        wcount.textContent = count
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Removed from Wishlist '
+                        });
+
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+
+
+        function addCart(productId) {
+
+            $.ajax({
+                url: `add_cart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success == 'added') {
+                        const count = response.count
+                        const ccount = document.getElementById('ccount')
+                        ccount.textContent = count
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added to Cart '
+                        });
+
+
+                    } else if (response.success == 'already') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Already in Cart '
+                        });
+                    } else if (response.success == 'stockout') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Sorry,Currently Out of Stock'
+                        });
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+
+        function removeCart(productId) {
+
+            $.ajax({
+                url: `removecart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        const count = response.count
+                        const ccount = document.getElementById('ccount')
+                        ccount.textContent = count
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Removed from Cart'
+                        });
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+    </script>
+    <%- include( '../homelayouts/homefoot.ejs')%>

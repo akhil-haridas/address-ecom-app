@@ -1,0 +1,231 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="/profile" style="color: #ca1515; font-weight: 800;">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+                        </ul>
+        </div>
+    </div>
+    <div><i class='bx bxs-wallet-alt' style="font-size: 25px;
+    letter-spacing: 15px; float: left;">
+            </i>
+        <p style="font-size: 15px;">Wallet Balance :
+            <span style="color: rgb(45 147 23);
+    font-weight: 700;">&#x20B9;&nbsp;<%=userData.wallet%></span>
+
+        </p>
+    </div>
+    <div class="container emp-profile" style="background: transparent;">
+        <form method="">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-img" style="border: solid 2px; width: 263px; margin-top: 70px;">
+                        <%if(userData.image){%>
+                            <img src="/userimg/<%= userData.image%>" style="width: -1%;" alt=" User image" />
+                            <%}else{%>
+                                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" style="width: -1%;" alt=" User image" />
+                                <%}%>
+
+
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="profile-head">
+                        <h5>
+                            <%= userData.name%>
+                        </h5>
+                        <h6 style="margin-top: 15px;">
+                            Joined :
+                            <%= userData.date%>
+                        </h6>
+                        <p class="proile-rating"><span></span></p>
+                        <ul class="nav nav-tabs" id="myTab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="home-tab1" data-toggle="tab" href="/" role="tab" aria-controls="home" aria-selected="true"></a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="profile-tab1" data-toggle="tab" href="/profile" role="tab" aria-controls="profile" aria-selected="false"></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <a href="/orders"><input type="button" class="site-btn" name="btnAddMore" value="My  Orders" style="margin-bottom: 10px; width: 160px;" /></a>
+                    <a href="/edit_profile?id=<%=userData._id%>"><input type="button" class="site-btn" style="background: black;" name="btnAddMore" value="Edit Profile" /></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="profile-work">
+                        <!-- <p>WORK LINK</p>
+                            <a href="">Website Link</a><br/>
+                            <a href="">Bootsnipp Profile</a><br/>
+                            <a href="">Bootply Profile</a>
+                            <p>SKILLS</p>
+                            <a href="">Web Designer</a><br/>
+                            <a href="">Web Developer</a><br/>
+                            <a href="">WordPress</a><br/>
+                            <a href="">WooCommerce</a><br/>
+                            <a href="">PHP, .Net</a><br/> -->
+                    </div>
+                </div>
+                <div class="col-md-8" style="margin-top: -160px;">
+                    <div class="tab-content profile-tab" id="myTabContent" style="margin-top: -30px;">
+                        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Name :</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= userData.name%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Surname :</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= userData.surname%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Joined :</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= userData.date%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Email :</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= userData.email%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Phone :</label>
+                                </div>
+                                <div class="col-md-6">
+                                    <p>
+                                        <%= userData.mobile%>
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label>Address :</label>
+                                </div>
+                                <%if(userData.address.length > 0){%>
+                                    <div class="col-md-6">
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">Home : </span>
+                                            <%= userData.address[0].home%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">Street : </span>
+                                            <%= userData.address[0].street%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">City : </span>
+                                            <%= userData.address[0].city%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">Zip code : </span>
+                                            <%= userData.address[0].zip%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">District : </span>
+                                            <%= userData.address[0].district%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">State : </span>
+                                            <%= userData.address[0].state%>
+                                        </p>
+                                        <p><span style="color: rgb(255, 0, 0); font-weight: 700;">Country : </span>
+                                            <%= userData.address[0].country%>
+                                        </p>
+                                    </div>
+                                    <%}else{%>
+                                        <%}%>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+            if (wishlistAddedMsg) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: wishlistAddedMsg
+                });
+
+                // Remove the success message from session storage
+                sessionStorage.removeItem('wishlistAddedMsg');
+
+            }
+        });
+    </script>
+    <%- include('../homelayouts/homefoot.ejs')%>

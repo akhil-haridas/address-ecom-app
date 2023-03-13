@@ -1,0 +1,197 @@
+<%- include('../adminlayouts/adminhead.ejs') %>
+    <section id="sidebar">
+        <a href="/admin/home" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">Welcome, A D M I N</span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="/admin/home">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products">
+                    <i class='bx bxs-shopping-bag'></i>
+                    <span class="text">Products</span>
+                </a>
+            </li>
+            <li class="active">
+                <a href="/admin/orders">
+                    <i class='bx bxs-cart'></i>
+                    <span class="text">Orders</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/customers" id="cust">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/category">
+                    <i class='bx bxs-category'></i>
+                    <span class="text">Category</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/banners">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Banners</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/coupons">
+                    <i class='bx bxs-purchase-tag'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/setting">
+                    <!-- <i class='bx bxs-cog'></i> -->
+                    <span class=""></span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search..." name="search" aria-label="search" style="display: none;">
+                    <button type="submit" style="background: none;" class=""><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="#" class="">
+                <!-- <i class='bx bxs-bell'></i> -->
+                <span class=""></span>
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Orders</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="/admin/orders">Orders</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="/admin/orders">Order Management</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <nav style="overflow: hidden;">
+                        <form action="" style="margin-left: 439px;margin-bottom: 18px;">
+                            <div class="form-input">
+                                <input type="search" placeholder="Search..." name="search" aria-label="search" autocomplete="off">
+                                <button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+                            </div>
+                        </form>
+                    </nav>
+                    <table class="table align-middle mb-0 bg-white">
+                        <thead class="bg-light">
+                            <tr>
+                                <th>No.</th>
+                                <th>OrderID</th>
+                                <th>Name</th>
+                                <th>Date</th>
+                                <th>Payment</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if(orders.length > 0){
+                                for(let i=0 ;i < orders.length;i++){
+                                    %>
+                                <tr>
+                                    <td>
+                                        <p style=" font-weight: 600;">
+                                            <%= i+1 %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="fw-bold mb-1">
+                                            <%= orders[i]._id %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <p class="fw-normal mb-1">
+                                            <%= orders[i].userId.name%>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <%= orders[i].date %>
+                                    </td>
+                                    <td>
+                                        <p class="fw-normal mb-1">
+                                            <%= orders[i].paymentStatus %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <% if(orders[i].orderStatus == 'Placed'){%>
+                                            <span class="status" style="background:rgb(255, 0, 217) ;">Placed</span>
+                                            <%}else if(orders[i].orderStatus == 'Pending'){%>
+                                                <span class="status" style="background: #fd7238;">Pending</span>
+                                                <%}else if(orders[i].orderStatus == 'Shipping'){%>
+                                                    <span class="status" style="background: #3c91e6;">Shipping</span>
+                                                    <%}else if(orders[i].orderStatus == 'Out for delivery'){%>
+                                                        <span class="status" style="background: rgb(210, 204, 18);">Out for deliivery</span>
+                                                        <%}else if(orders[i].orderStatus == 'Delivered'){%>
+                                                            <span class="status" style="background: rgb(0, 255, 0);">Delivered</span>
+                                                            <%}else if(orders[i].orderStatus=='Returned' ){%>
+                                                                <span class="status" style="background: red;">Ruturned</span>
+                                                                <%}else{%>
+                                                                    <span class="status" style="background: red;">Cancelled</span>
+                                                                    <%}%>
+                                    </td>
+                                    <td>
+
+                                        <button style=" border: none; background: transparent;"><a href="/admin/order_update?id=<%=orders[i]._id %>"><span class="status more">View</span></a></button>
+                                    </td>
+                                </tr>
+                                <%
+                        }
+                    }else{
+                        %>
+                                    <tr>
+                                        <td colspan="5">
+                                            <p>Orders Not Found</p>
+                                        </td>
+                                    </tr>
+                                    <%
+                    }
+                    %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+        <!-- MAIN -->
+    </section>
+    <%- include('../adminlayouts/adminfooter.ejs') %>

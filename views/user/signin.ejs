@@ -1,0 +1,67 @@
+<%- include('../layout/userhead.ejs') %>
+
+    <div class="container">
+        <div class="forms-container">
+            <div class="signin-signup">
+                <form action="/signin" class="sign-in-form" method="post">
+                    <h2 class="title">Sign in</h2>
+                    <div style="padding-bottom: 30px;">
+                        <% if(typeof message !=='undefined' ){ %>
+                            <p style="color: rgb(214, 0, 0);">
+                                <%= message %>
+                            </p>
+                            <% } %>
+                    </div>
+                    <div class="input-field">
+                        <i class="fas fa-user"></i>
+                        <input type="text" placeholder="Mobile Number" name="mobile" id="mobile" required autocomplete="off" />
+
+                    </div>
+                    <span id="mobile-error" style="color: rgb(255, 0, 0);"></span>
+                    <div class="input-field">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" placeholder="Password" name="password" required />
+                    </div>
+                    <input type="submit" value="Login" class="btn solid" />
+                    <a href="/forget" style="text-decoration: none;">
+                        <p class="social-text">Forgotten password ?</p>
+                    </a>
+                    <a href="/mobile" style="text-decoration: none;">Login with OTP!</a>
+                </form>
+            </div>
+        </div>
+        <div class="panels-container">
+            <div class="panel left-panel">
+                <div class="content">
+                    <h3>New here ?</h3>
+                    <p>
+                        With the trendiest, freshest, and most unique styles from across India and the world, ADDRESS invites you to express your personal style fearlessly.
+                    </p>
+                    <a href="/signup"><button class="btn transparent" id="sign-up-btn">
+                    Sign up
+                </button></a>
+                </div>
+                <img src="" class="image" alt="" />
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile number validation
+        const mobileInput = document.getElementById('mobile');
+        const mobileError = document.getElementById('mobile-error');
+        mobileInput.addEventListener('input', () => {
+            const mobilePattern = /^\d{10}$/; // Only allow 10 digits
+            if (!mobileInput.value) { // check if input is empty
+                mobileInput.classList.remove('invalid');
+                mobileError.textContent = '';
+            } else if (!mobilePattern.test(mobileInput.value)) {
+                mobileInput.classList.add('invalid');
+                mobileError.textContent = 'Please enter 10-digit mobile number';
+            } else {
+                mobileInput.classList.remove('invalid');
+                mobileError.textContent = '';
+            }
+        });
+    </script>
+    <%- include('../layout/userfooter.ejs') %>

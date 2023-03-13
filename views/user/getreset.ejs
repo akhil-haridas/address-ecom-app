@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A D D R E S S</title>
+    <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/css/modal.css" type="text/css">
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <i class="bx bxs-check-shield"></i>
+        </header>
+        <h4>A D D R E S S</h4>
+        <% if(typeof message !=='undefined' ){ %>
+            <p style="color: rgb(44, 218, 0);">
+                <%= message %>
+            </p>
+            <% } %>
+                <h1>Enter 4 - Digit OTP Here! </h1>
+                <form action="/reset" method="post">
+                    <div class="input-field">
+                        <input type="text" name="otp1" />
+                        <input type="text" name="otp2" disabled />
+                        <input type="text" name="otp3" disabled />
+                        <input type="text" name="otp4" disabled />
+                    </div>
+                    <button type="submit">Verify OTP</button>
+                    <div style="color: red;"><span id="timer" style="color: rgb(255, 0, 0);"></span></div>
+                </form>
+    </div>
+
+    <script>
+        const inputs = document.querySelectorAll("input"),
+            button = document.querySelector("button");
+
+        inputs.forEach((input, index1) => {
+            input.addEventListener("keyup", (e) => {
+                const currentInput = input,
+                    nextInput = input.nextElementSibling,
+                    prevInput = input.previousElementSibling;
+
+                if (currentInput.value.length > 1) {
+                    currentInput.value = "";
+                    return;
+                }
+                if (nextInput && nextInput.hasAttribute("disabled") && currentInput.value !== "") {
+                    nextInput.removeAttribute("disabled");
+                    nextInput.focus();
+                }
+                if (e.key === "Backspace") {
+                    inputs.forEach((input, index2) => {
+                        if (index1 <= index2 && prevInput) {
+                            input.setAttribute("disabled", true);
+                            input.value = "";
+                            prevInput.focus();
+                        }
+                    });
+                }
+                if (!inputs[3].disabled && inputs[3].value !== "") {
+                    button.classList.add("active");
+                    return;
+                }
+                button.classList.remove("active");
+            });
+        });
+        window.addEventListener("load", () => inputs[0].focus());
+
+
+        //otp timer
+
+        let timerOn = true;
+
+        function timer(remaining) {
+            var m = Math.floor(remaining / 60);
+            var s = remaining % 60;
+
+            m = m < 10 ? '0' + m : m;
+            s = s < 10 ? '0' + s : s;
+            document.getElementById('timer').innerHTML = m + ':' + s + 's';
+            remaining -= 1;
+
+            if (remaining >= 0 && timerOn) {
+                setTimeout(function () {
+                    timer(remaining);
+                }, 1000);
+                return;
+            }
+
+            if (!timerOn) {
+                // Do validate stuff here
+                return;
+            }
+
+            // Do timeout stuff here
+            alert('Please resend the OTP');
+        }
+
+        timer(30);
+
+    </script>
+</body>
+
+</html>

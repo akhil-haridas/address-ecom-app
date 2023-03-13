@@ -1,0 +1,226 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !== 'undefined' ){%>
+                    <a href="/profile" style="color: #ca1515; font-weight: 800;">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+                        </ul>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+
+    <div class="container rounded bg-white mt-5 mb-5">
+        <form class="row" method="post" enctype="multipart/form-data">
+            <div class="col-md-3 border-right">
+
+                <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5" width="150px" src="https://t4.ftcdn.net/jpg/02/83/72/41/360_F_283724163_kIWm6DfeFN0zhm8Pc0xelROcxxbAiEFI.jpg"><span class="font-weight-bold"><%=userData.name%></span><span class="text-black-50"><%=userData.email%></span><span> </span></div>
+                <main class="main_full">
+                    <div class="container">
+                        <div class="panel">
+                            <div class="button_outer">
+                                <div class="btn_upload">
+                                    <input type="file" id="upload_file" name="userimg"> Upload Image
+                                </div>
+                                <div class="processing_bar"></div>
+                                <div class="success_box"></div>
+                            </div>
+                        </div>
+                        <div class="error_msg"></div>
+                        <div class="uploaded_file_view" id="uploaded_view">
+                            <span class="file_remove">X</span>
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div class="col-md-5 border-right">
+                <div class="p-3 py-5">
+                    <!-- <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h4 class="text-right">Profile Settings</h4>
+                </div> -->
+                    <div class="row mt-2">
+                        <div class="col-md-6"><label style="font-weight: 600;" class="labels">Name</label><input style="font-weight: 600;" type="text" class="form-control" placeholder="" name="name" value="<%= userData.name%>"></div>
+
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><label style="font-weight: 600;" class="labels">Surname</label><input style="font-weight: 600;" type="text" class="form-control" value="<%= userData.surname%>" name="surname"></div>
+                        <div class="col-md-12"><label style="font-weight: 600;" class="labels">Email</label><input style="font-weight: 600;" type="email" class="form-control" name="email" placeholder="enter email" value="<%= userData.email%>"></div>
+
+
+                    </div>
+
+                    <div class="mt-5 text-center">
+                        <button class="site-btn" type="submit" style="background-color: #000000; border-color: #ffffff;">Update Profile</button>
+                        <br>
+                        <br>
+                        <button type="button" class="site-btn" id="toggle-btn">Change your password</button></div>
+
+
+                </div>
+
+            </div>
+
+            <div class="col-md-4">
+                <div class="" style="border: solid 1px;">
+                    <%if(userData.image){%>
+                        <img src="/userimg/<%= userData.image%>" alt="User Image">
+                        <%}else{%>
+                            <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt="User Image">
+                            <%}%>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+    <div class="container rounded bg-white mt-10 mb-5">
+        <div id="dialog_layer" style="display: none;">
+            <form id="changePasswordForm" style="margin-top: 100px;border: none;">
+                <h2 class="dialog_label" style="text-align: center;">Change your Password</h2>
+                <div>
+
+                    <div class="col-md-12"><label style="font-weight: 600;" class="labels">Old Password</label><input style="font-weight: 600;" type="password" class="form-control" name="oldpass" placeholder="Enter your old password"></div>
+                    <br><br>
+                    <div class="col-md-12"><label style="font-weight: 600;" class="labels">New Password</label><input style="font-weight: 600;" type="password" class="form-control" name="newpass" placeholder="Enter your new password"></div>
+                    <br><br>
+                    <div class="col-md-12"><label style="font-weight: 600;" class="labels">Confirm Password</label><input style="font-weight: 600;" type="password" class="form-control" name="confirmpass" placeholder="Confirm your password"></div>
+                    <br><br>
+                </div>
+                <button type="submit" class="site-btn">Update Password</button>
+
+            </form>
+        </div>
+    </div>
+
+
+    <script>
+        $(function() {
+            $('#changePasswordForm').on('submit', function(e) {
+                e.preventDefault();
+
+                // Submit form data using AJAX
+                $.ajax({
+                    url: '/change_password',
+                    type: 'POST',
+                    data: $('#changePasswordForm').serialize(),
+                    success: function(response) {
+                        if (response.success === true) {
+                            sessionStorage.setItem('wishlistAddedMsg', 'Password Changed');
+                            location.href = '/profile';
+                        } else if (response.success == 'miss') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'warning',
+                                title: 'Sorry,Please Check Your Confirm Password'
+                            });
+                        } else if (response.success == 'fill') {
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Invalid input,Please Fill the input'
+                            });
+                        } else {
+                            // Display error message using Swal library
+                            const Toast = Swal.mixin({
+                                toast: true,
+                                position: 'top',
+                                showConfirmButton: false,
+                                timer: 3000,
+                                timerProgressBar: true,
+                                didOpen: (toast) => {
+                                    toast.addEventListener('mouseenter', Swal.stopTimer);
+                                    toast.addEventListener('mouseleave', Swal.resumeTimer);
+                                }
+                            });
+
+                            Toast.fire({
+                                icon: 'error',
+                                title: 'Sorry, the old password you entered is incorrect.'
+                            });
+                        }
+                    }
+
+                });
+            });
+        });
+
+
+        var button = document.getElementById("toggle-btn");
+        var div = document.getElementById("dialog_layer");
+
+        button.addEventListener("click", function() {
+            if (div.style.display === "none") {
+                button.textContent = 'Close'
+                div.style.display = "block";
+            } else {
+                button.textContent = 'Change Your Password'
+                div.style.display = "none";
+            }
+        });
+    </script>
+    <%- include('../homelayouts/homefoot.ejs')%>

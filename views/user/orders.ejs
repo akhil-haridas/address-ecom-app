@@ -1,0 +1,126 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData !=='undefined' ){%>
+                    <a href="/profile" style="color: #ca1515; font-weight: 800;">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData=='undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                        </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                        </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search
+                                                search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip">
+                                    <%=wishlistcount%>
+                                </div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip">
+                                    <%=cartcount%>
+                                </div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option" style="margin-bottom:
+                                10px;">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i>Home</a>
+                        <a href="/profile">My Account</a>
+                        <span>My Orders</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <div class="col-12 col-lg-9 mt-4 mt-lg-0" style="max-width: 100%;">
+        <div class="card">
+            <div class="card-header">
+                <h5>Order History</h5>
+            </div>
+            <div class="card-divider"></div>
+            <div class="card-table">
+                <div class="table-responsive-sm">
+                    <table id="myTable">
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% for(let i=0 ;i < orderData.length;i++){%>
+
+                                <tr>
+                                    <td>
+                                        <p>
+                                            <%= i+1 %>
+                                        </p>
+                                    </td>
+                                    <td><a href="/order_details?id=<%=orderData[i]._id%>">#<%=orderData[i]._id%></a></td>
+                                    <td>
+                                        <%=orderData[i].date%>
+                                    </td>
+                                    <td>
+                                        <%=orderData[i].orderStatus%>
+                                    </td>
+                                    <td>
+                                        &#x20B9;
+                                        <%=orderData[i].total%>&nbsp;for
+                                            <%=orderData[i].products.length%>
+                                                item(s)</td>
+                                </tr>
+                                <%
+                    }
+                    %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="card-divider"></div>
+
+        </div>
+    </div>
+
+    <%- include('../homelayouts/homefoot.ejs')%>

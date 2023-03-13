@@ -1,0 +1,706 @@
+<%- include('../homelayouts/homehead.ejs')%>
+    <style>
+         :root {
+            --blue-maincolor: #00acee;
+            --lightblue-accent-color: #DBF5FF;
+            --darkblue-accent-color: #0092C9;
+            --bg-color: white;
+            --lightgray-accent-color: #DADADA;
+            --main-font: Arial;
+        }
+        
+        body,
+        h1,
+        h2,
+        h3,
+        h4,
+        p {
+            font: var(--main-font);
+        }
+        
+        button {
+            color: var(--blue-maincolor);
+            background-color: var(--bg-color);
+            font-size: 1rem;
+        }
+        
+        #tweetSection {
+            margin: 5% auto 5px auto;
+            text-align: center;
+            padding: 20px;
+            width: 100%;
+            position: relative;
+            height: 130px;
+        }
+        
+        #textbox {
+            width: 100%;
+            min-height: 50px;
+            border-width: 0px;
+            font-size: 20px;
+            outline: none;
+            display: block;
+            overflow: hidden;
+            display: block;
+            resize: none;
+            /* maxlength: 100px in HTML */
+        }
+        
+        .bottom {
+            width: 180px;
+            float: right;
+            margin-right: 60px;
+        }
+        
+        #charCount {
+            position: relative;
+            left: 75px;
+            font-size: 1.2rem;
+            color: var(--blue-maincolor);
+        }
+        
+        .tweetButton {
+            padding: 10px 30px 10px 30px;
+            margin-top: 10px;
+            margin-left: 10px;
+            position: relative;
+            left: 75px;
+            color: white;
+            background-color: var(--blue-maincolor);
+            border-style: none;
+            border-radius: 20px;
+        }
+        
+        .tweetButton:hover {
+            background-color: var(--darkblue-accent-color);
+        }
+        
+        .rate {
+            float: left;
+            height: 46px;
+            padding: 0 10px;
+            position: relative;
+        }
+        
+        .rate:not(:checked)>input {
+            position: absolute;
+            top: -9999px;
+        }
+        
+        .rate:not(:checked)>label {
+            float: right;
+            width: 1em;
+            overflow: hidden;
+            white-space: nowrap;
+            cursor: pointer;
+            font-size: 30px;
+            color: #ccc;
+        }
+        
+        .rate:not(:checked)>label:before {
+            content: '★ ';
+        }
+        
+        .rate>input:checked~label {
+            color: #ffc700;
+        }
+        
+        .rate:not(:checked)>label:hover,
+        .rate:not(:checked)>label:hover~label {
+            color: #deb217;
+        }
+        
+        .rate>input:checked+label:hover,
+        .rate>input:checked+label:hover~label,
+        .rate>input:checked~label:hover,
+        .rate>input:checked~label:hover~label,
+        .rate>label:hover~input:checked~label {
+            color: #c59b08;
+        }
+        
+        figure.zoom {
+            background-position: 50% 50%;
+            position: relative;
+            width: 430px;
+            overflow: hidden;
+            cursor: zoom-in;
+        }
+        
+        figure.zoom img:hover {
+            opacity: 0;
+        }
+        
+        figure.zoom img {
+            transition: opacity .5s;
+            display: block;
+            width: 100%;
+        }
+    </style>
+    <div class="col-xl-6 col-lg-7">
+        <nav class="header__menu">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/contact">Contact</a></li>
+
+            </ul>
+        </nav>
+    </div>
+    <div class="col-lg-3">
+        <div class="header__right">
+            <div class="header__right__auth">
+                <%if(typeof userData != 'undefined' ){%>
+                    <a href="/profile">
+                        <%= userData.name%>
+                    </a>
+                    <a href="/logout">&ensp;Logout</a>
+                    <%}else{%>
+                        <a href="/signin">Login</a>
+                        <a href="/signup">Register</a>
+                        <%}%>
+            </div>
+            <%if(typeof userData == 'undefined' ){%>
+                <ul class="header__right__widget">
+                    <li><span class="icon_search search-switch"></span></li>
+                    <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                            </a></li>
+                    <li><a href="/cart"><span class="icon_bag_alt"></span>
+                            </a></li>
+                </ul>
+                <%}else{%>
+                    <ul class="header__right__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip" id="wcount"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip" id="ccount"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+                    <%}%>
+        </div>
+    </div>
+    </div>
+    <div class="canvas__open">
+        <i class="fa fa-bars"></i>
+    </div>
+    </div>
+    </header>
+
+    <!-- Breadcrumb Begin -->
+    <div class="breadcrumb-option">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="breadcrumb__links">
+                        <a href="/"><i class="fa fa-home"></i> Home</a>
+                        <a href="/shop">Shop</a>
+                        <span><%= productData.name%></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Breadcrumb End -->
+
+    <!-- Product Details Section Begin -->
+    <section class="product-details spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="product__details__pic">
+                        <div class="product__details__pic__left product__thumb nice-scroll">
+
+                            <a class="pt active" href="#image-1">
+
+                                
+                                <img src="/products_img/<%=productData.image[0]%>" alt="">
+
+                            </a>
+                            <% for(let i=1 ; i< productData.image.length;i++){%>
+                                <a class="pt" href="#image-<%=i+1%>">
+                                <img src="/products_img/<%=productData.image[i]%>" alt="">
+                                
+                            </a>
+                                <%  } %>
+                        </div>
+                        <div class="product__details__slider__content" style="width: 411.896px;">
+                            <div class="product__details__pic__slider owl-carousel">
+                                <% for(let i=0 ; i< productData.image.length;i++){%>
+                                    <figure class="zoom" onmousemove="zoom(event)" style="background-image: url(/products_img/<%=productData.image[i]%>)">
+                                        <img data-hash="image-<%=i+1%>" class="product__big__img" src="/products_img/<%=productData.image[i]%>" alt="">
+                                    </figure>
+                                    <%  } %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="product__details__text">
+                        <h3>
+                            <%=productData.name%><span>Brand&emsp;:&emsp;<%=productData.brand%></span></h3>
+                        <div class="rating">
+                            <% for(let j=0; j < Math.round(productData.rating); j++) { %>
+                                <i class="fa fa-star"></i>
+                                <% } %>
+                                    <span>( <%=productData.reviews.length%> reviews )( <%=productData.rating%> rating )</span>
+                        </div>
+                        <div class="product__details__price">&#x20B9;
+                            <%=productData.offerPrice%> <span>&#x20B9;<%=productData.grossPrice%></span></div>
+
+
+                        <div class="product__details__widget">
+                            <ul>
+                                <li>
+                                    <span>Availability:</span>
+                                    <div class="stock__checkbox">
+                                        <% if(productData.stock <= 0){%>
+                                            <label for="stockin" style="color: red;">Out of Stock</label>
+                                            <%} else if(productData.stock <= 15){%>
+                                                <label for="stockin" style="color: red;">Limited Stock(<%=productData.stock%>left)</label>
+                                                <%}else{%>
+                                                    <label for="stockin" style="color: green;">In Stock</label>
+                                                    <%}%>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Available color:</span>
+                                    <div class="color__checkbox">
+                                        <label for="red">
+                                            
+                                            <p style="color: #666666;"><%=productData.color%></p>
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Available size:</span>
+                                    <div class="size__btn">
+                                        <label for="xs-btn" class="active">
+                                            <input type="radio" id="xs-btn">
+                                            <%=productData.size%>
+                                        </label>
+
+                                    </div>
+                                </li>
+                                <li>
+                                    <span>Promotions:</span>
+                                    <p>Free shipping</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <p style="padding-top: 30px;padding-bottom: 30px">We offer 7 days of hassle-free returns & exchanges from the date of delivery and a further 7 days for the returned product(s) to reach us. We also offer reverse pick-up services at no additional costs or charge. ONLY IF YOUR PIN CODE
+                        IS SERVICEABLE.</p>
+
+                    <div class="product__details__button">
+                        <!-- <div class="quantity">
+                            <span>Quantity:</span>
+                            <div class="pro-qty">
+                                <input type="text" name="quantity" value="1">
+                            </div>
+                        </div> -->
+                        <% if(productData.stock != 0){%>
+                            <a onclick="addCart('<%=productData._id%>')" class="cart-btn"><span class="icon_bag_alt" style="cursor:pointer"></span> Add to cart</a>
+                            <%}else{%>
+                                <a class="cart-btn" style="background: rgb(0, 0, 0);"><span>Out of Stock</span></a>
+                                <%}%>
+
+                                    <ul>
+                                        <% if(wishlistc.includes(productData._id)){ %>
+                                            <li><a onclick="removeWishlist('<%=productData._id%>')" style="background: #ca1515; cursor: pointer;"><span class="icon_heart_alt" style="color: #fff;"></span></a></li>
+                                            <%}else{%>
+                                                <li><a onclick="addWishlist('<%=productData._id%>')" style="cursor:pointer;"><span class="icon_heart_alt"></span></a></li>
+                                                <%}%>
+                                    </ul>
+                    </div>
+                </div>
+                <div class="col-lg-12">
+                    <div class="product__details__tab">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" data-toggle="tab" href="#tabs-1" role="tab">Description</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" data-toggle="tab" href="#tabs-3" role="tab">Reviews ( <%=productData.reviews.length%> )</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+
+                            <form id="tweetSection" style="display: none;">
+                                <input type="hidden" value="<%=productData._id%>" name="reviewid">
+                                <div class="text-section">
+                                    <div class="rate">
+                                        <input type="radio" id="star5" name="rate" value="5" />
+                                        <label for="star5" title="text">5 stars</label>
+                                        <input type="radio" id="star4" name="rate" value="4" />
+                                        <label for="star4" title="text">4 stars</label>
+                                        <input type="radio" id="star3" name="rate" value="3" />
+                                        <label for="star3" title="text">3 stars</label>
+                                        <input type="radio" id="star2" name="rate" value="2" />
+                                        <label for="star2" title="text">2 stars</label>
+                                        <input type="radio" id="star1" name="rate" value="1" />
+                                        <label for="star1" title="text">1 star</label>
+                                    </div>
+                                    <textarea name="review" id="textbox" placeholder="What's about the product?" maxlength="100" oninput="auto_grow(this)"></textarea>
+
+                                    <div class="bottom">
+                                        <span id="charCount">0/200</span>
+                                        <button class="tweetButton" type="submit">POST</button>
+                                    </div>
+                                </div>
+                            </form>
+
+                            <div class="tab-pane active" id="tabs-1" role="tabpanel">
+                                <p>
+                                    <%= productData.description%>
+                                </p>
+
+                            </div>
+                            <div class="tab-pane" id="tabs-3" role="tabpanel">
+                                <h6 id="toggle-btn" style="color: #c50000; cursor: pointer;">- Write your own Review </h6>
+                                <% for(let i=0 ; i< productData.reviews.length;i++){%>
+                                    <p style="font-size: 17px; font-weight: 700; color:#c50000 ;">
+                                        <%=productData.reviews[i].username%>
+                                            <span style="color: #e2bf00;font-size: 15px;font-weight: 600;">(<%=productData.reviews[i].rating%> Star)</span>
+
+
+                                    </p>
+
+                                    <p style="overflow: hidden;">
+
+                                        <%=productData.reviews[i].comment%>
+                                    </p>
+                                    <%}%>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+            <div class=" row ">
+                <div class="col-lg-12 text-center ">
+                    <div class="related__title ">
+                        <h5>RELATED PRODUCTS</h5>
+                    </div>
+                </div>
+                <% for(let i=0 ; i< relate.length;i++){%>
+                    <div class="col-lg-3 col-md-4 col-sm-6 ">
+                        <div class="product__item ">
+                            <div class="product__item__pic set-bg " data-setbg="/products_img/<%=relate[i].image[0]%>">
+                                <% if(relate[i].stock <= 0){%>
+                                    <div class="label stockout">STOCK OUT</div>
+                                    <%} else if(relate[i].stock <= 15){%>
+                                        <div class="label sale">limited stock</div>
+                                        <%}else{%>
+                                            <div class="label yellow">sale</div>
+                                            <%}%>
+                                                <!-- <ul class="product__hover">
+                                                    <li><a href="" class="image-popup"><span class="arrow_expand"></span></a>
+                                                    </li>
+                                                    <% if(wishlistc.includes(productData._id)){ %>
+                                                        <li><a href="" onclick="removeWishlist('<%=relate[i]._id%>')" style="background: #ca1515;"><span
+                                                                        class="icon_heart_alt" style="color: #fff;"></span></a></li>
+                                                        <%}else{%>
+                                                            <li><a href="" onclick="addWishlist('<%=relate[i]._id%>')"><span class="icon_heart_alt"></span></a></li>
+                                                            <%}%>
+
+                                                                <li><a onclick="addCart('<%=relate[i]._id%>')"><span class="icon_bag_alt"></span></a></li>
+
+                                                </ul> -->
+                            </div>
+                            <div class="product__item__text">
+                                <h6>
+                                    <a href="/product?id=<%=relate[i]._id%>">
+                                        <%=relate[i].name%>
+                                    </a>
+                                </h6>
+                                <div class="rating">
+                                    <% for(let j=0; j < Math.round(relate[i].rating); j++) { %>
+                                        <i class="fa fa-star"></i>
+                                        <% } %>
+
+                                </div>
+                                <div class="product__price">
+                                    &#x20B9;
+                                    <%= relate[i].offerPrice%><span>&#x20B9;<%=relate[i].grossPrice%></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <%  } %>
+            </div>
+        </div>
+    </section>
+    <!-- Product Details Section End -->
+    <script>
+        $('#tweetSection').submit((e) => {
+            e.preventDefault()
+            $.ajax({
+                url: '/product',
+                method: 'post',
+                data: $('#tweetSection').serialize(),
+                success: (response) => {
+                    if (response.success === true) {
+                        sessionStorage.setItem('wishlistAddedMsg', "Review Posted");
+                        window.location.reload();
+                    } else if (response.success === false) {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Sorry,You are not able to this,Please Purchase!'
+                        });
+
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        })
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+
+            const wishlistAddedMsg = sessionStorage.getItem('wishlistAddedMsg');
+
+            if (wishlistAddedMsg) {
+                const Toast = Swal.mixin({
+                    toast: true,
+                    position: 'top',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    didOpen: (toast) => {
+                        toast.addEventListener('mouseenter', Swal.stopTimer);
+                        toast.addEventListener('mouseleave', Swal.resumeTimer);
+                    }
+                });
+
+                Toast.fire({
+                    icon: 'success',
+                    title: wishlistAddedMsg
+                });
+
+                // Remove the success message from session storage
+                sessionStorage.removeItem('wishlistAddedMsg');
+
+            }
+        });
+
+        function addWishlist(productId) {
+            $.ajax({
+                url: `add_wishlist/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        const count = response.count
+                        const wcount = document.getElementById('wcount')
+                        wcount.textContent = count
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added to Wishlist'
+                        });
+
+                    } else if (response.success === 'already') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Already in Wishlist'
+                        });
+                    } else {
+                        location.href = '/signin';
+                    }
+                }
+            });
+        }
+
+        function addCart(productId) {
+
+            $.ajax({
+                url: `add_cart/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success == 'added') {
+                        const count = response.count
+                        const ccount = document.getElementById('ccount')
+                        ccount.textContent = count
+
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Added to Cart '
+                        });
+
+
+                    } else if (response.success == 'already') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Already in Cart '
+                        });
+                    } else if (response.success == 'stockout') {
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'warning',
+                            title: 'Sorry,Currently Out of Stock'
+                        });
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+
+
+
+        function removeWishlist(productId) {
+
+            $.ajax({
+                url: `remove_wishlist/${productId}`,
+                method: 'get',
+                success: function(response) {
+                    if (response.success === true) {
+                        const count = response.count
+                        const wcount = document.getElementById('wcount')
+                        wcount.textContent = count
+                        const Toast = Swal.mixin({
+                            toast: true,
+                            position: 'top',
+                            showConfirmButton: false,
+                            timer: 3000,
+                            timerProgressBar: true,
+                            didOpen: (toast) => {
+                                toast.addEventListener('mouseenter', Swal.stopTimer);
+                                toast.addEventListener('mouseleave', Swal.resumeTimer);
+                            }
+                        });
+
+                        Toast.fire({
+                            icon: 'success',
+                            title: 'Removed from Wishlist '
+                        });
+
+                    } else {
+                        location.href = '/signin'
+                    }
+                }
+            })
+        }
+    </script>
+    <script>
+        var button = document.getElementById("toggle-btn");
+        var div = document.getElementById("tweetSection");
+
+        button.addEventListener("click", function() {
+            if (div.style.display === "none") {
+                div.style.display = "block";
+            } else {
+                div.style.display = "none";
+            }
+        });
+
+
+        /* check how many characters counter */
+        let textArea = document.getElementById("textbox");
+
+        let characterCounter = document.getElementById("charCount");
+
+        const maxNumOfChars = 100;
+
+        const countCharacters = () => {
+            let numOfEnteredChars = textArea.value.length;
+            counter = numOfEnteredChars;
+            characterCounter.textContent = numOfEnteredChars + "/100";
+
+            if (counter > 80) {
+                characterCounter.style.color = "red";
+            }
+        }
+
+        textArea.addEventListener("input", countCharacters);
+
+
+        /* fix textarea re-size */
+        function auto_grow(element) {
+            element.style.height = "5px";
+            element.style.height = (element.scrollHeight) + "px";
+        }
+
+        function zoom(e) {
+            var zoomer = e.currentTarget;
+            e.offsetX ? offsetX = e.offsetX : offsetX = e.touches[0].pageX
+            e.offsetY ? offsetY = e.offsetY : offsetX = e.touches[0].pageX
+            x = offsetX / zoomer.offsetWidth * 100
+            y = offsetY / zoomer.offsetHeight * 100
+            zoomer.style.backgroundPosition = x + '% ' + y + '%';
+        }
+    </script>
+
+    <%- include('../homelayouts/homefoot.ejs')%>

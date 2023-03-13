@@ -1,0 +1,607 @@
+<%- include('../adminlayouts/adminhead.ejs') %>
+    <style>
+        .circle-chart__circle {
+            animation: circle-chart-fill 2s reverse;
+            /* 1 */
+            transform: rotate(-90deg);
+            /* 2, 3 */
+            transform-origin: center;
+            /* 4 */
+        }
+        /**
+ * 1. Rotate by -90 degree to make the starting point of the
+ *    stroke the top of the circle.
+ * 2. Scaling mirrors the circle to make the stroke move right
+ *    to mark a positive chart value.
+ * 3. Using CSS transforms on SVG elements is not supported by Internet Explorer
+ *    and Edge, use the transform attribute directly on the SVG element as a
+ * .  workaround (https://markus.oberlehner.net/blog/pure-css-animated-svg-circle-chart/#part-4-internet-explorer-strikes-back).
+ */
+        
+        .circle-chart__circle--negative {
+            transform: rotate(-90deg) scale(1, -1);
+            /* 1, 2, 3 */
+        }
+        
+        .circle-chart__info {
+            animation: circle-chart-appear 2s forwards;
+            opacity: 0;
+            transform: translateY(0.3em);
+        }
+        
+        @keyframes circle-chart-fill {
+            to {
+                stroke-dasharray: 0 100;
+            }
+        }
+        
+        @keyframes circle-chart-appear {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        /* Layout styles only, not needed for functionality */
+        /* html {
+            font-family: sans-serif;
+            padding-right: 1em;
+            padding-left: 1em;
+        }
+         */
+        
+        .grid {
+            display: grid;
+            grid-column-gap: 1em;
+            grid-row-gap: 1em;
+            grid-template-columns: repeat(1, 1fr);
+        }
+        
+        @media (min-width: 31em) {
+            .grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="/admin/home" class="brand">
+            <i class='bx bxs-smile'></i>
+            <span class="text">Welcome, A D M I N</span>
+        </a>
+        <ul class="side-menu top">
+            <li class="active">
+                <a href="/admin/home">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/products">
+                    <i class='bx bxs-shopping-bag'></i>
+                    <span class="text">Products</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/orders">
+                    <i class='bx bxs-cart'></i>
+                    <span class="text">Orders</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/customers">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Customers</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/category">
+                    <i class='bx bxs-category'></i>
+                    <span class="text">Category</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/banners">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Banners</span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/coupons">
+                    <i class='bx bxs-purchase-tag'></i>
+                    <span class="text">Coupons</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="/admin/setting">
+                    <!-- <i class='bx bxs-cog' type="hidden"></i> -->
+                    <span class="text"></span>
+                </a>
+            </li>
+            <li>
+                <a href="/admin/logout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
+
+
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <i class='bx bx-menu'></i>
+            <form action="#">
+                <div class="form-input">
+                    <input type="search" placeholder="Search..." name="search" aria-label="search" style="display: none;">
+                    <button type="submit" style="background: none;" class=""><i class='bx bx-search'></i></button>
+                </div>
+            </form>
+            <input type="checkbox" id="switch-mode" hidden>
+            <label for="switch-mode" class="switch-mode"></label>
+            <a href="/admin" class="">
+                <i class=''></i>
+                <span class=""></span>
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+
+        <!-- MAIN -->
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>A D D R E S S - Fashion Store</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="/admin/home">Dashboard</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="/admin/home">Home</a>
+                        </li>
+                    </ul>
+                </div>
+                <a href="/admin/sales_report" class="btn-download" id="toggle-btn" style="cursor: pointer;">
+                    <i class='bx bxs-report'></i>
+                    <span class="text" id="span">Sales - Report</span>
+                </a>
+            </div>
+
+
+            <ul class="box-info">
+                <li>
+                    <i class='bx bxs-cart-alt'></i>
+                    <span class="text">
+                        <h3>
+                            <%=order%>
+                        </h3>
+                        <p>Total orders</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bxs-group'></i>
+                    <span class="text">
+                        <h3>
+                            <%=customer%>
+                        </h3>
+                        <p>Customers</p>
+                    </span>
+                </li>
+                <li>
+                    <i class='bx bx-rupee'></i>
+                    <span class="text">
+                        <h3>
+                            <%= sale[0]["total"] %>&ensp;Rs
+                        </h3>
+                        <p>Total Earnings</p>
+                    </span>
+                </li>
+            </ul>
+
+            <div class="table-data">
+                <input type="hidden" value="<%=donutChart%>" id="donut">
+                <div class="order">
+
+                    <div class="grid">
+                        <section style="width: 293px; margin-left: 15px;">
+
+                            <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="margin-left: 30px;">
+                                <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none"
+                                    cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="<%=donutChart[0]%>.100"
+                                    stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <g class="circle-chart__info">
+                                    <text class="circle-chart__percent" x="16.91549431" y="15.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="8"><%=donutChart[0]%>%</text>
+                                    <text class="circle-chart__subline" x="16.91549431" y="20.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="2">Cash on Delivery</text>
+                                </g>
+                            </svg>
+                        </section>
+                        <section style="width: 293px;">
+
+                            <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="margin-left: 20px;">
+                                <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none"
+                                    cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="<%=donutChart[1]%>"
+                                    stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <g class="circle-chart__info">
+                                    <text class="circle-chart__percent" x="16.91549431" y="15.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="8"><%=donutChart[1]%>%</text>
+                                    <text class="circle-chart__subline" x="16.91549431" y="20.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="2">Online Payment</text>
+                                </g>
+                            </svg>
+                        </section>
+                        <section style="width: 244px;">
+
+                            <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="margin-left: 5px;">
+                                <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none"
+                                    cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="<%=donutChart[2]%>"
+                                    stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
+                                <g class="circle-chart__info">
+                                    <text class="circle-chart__percent" x="16.91549431" y="15.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="8"><%=donutChart[2]%>%</text>
+                                    <text class="circle-chart__subline" x="16.91549431" y="20.5" alignment-baseline="central"
+                                        text-anchor="middle" font-size="2">Wallet Amount</text>
+                                </g>
+                            </svg>
+                        </section>
+
+                    </div>
+                </div>
+            </div>
+            <input type="hidden" value="<%=pieChart%>" id="pieChart">
+            <input type="hidden" value="<%=barChart%>" id="bargraph">
+            <div class="table-data">
+
+                <div class="order">
+                    <div class="row">
+                        <div class="col-lg-6 grid-margin stretch-card">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h1>Category Wise Sale Chart</h1>
+                                    <canvas id="myChart"></canvas>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="table-data">
+                <div class="order">
+                    <div class="col-lg-6 grid-margin stretch-card">
+                        <div class="card">
+                            <div class="card-body">
+                                <h1 class="card-title">Weekly Sale Bar chart</h1>
+                                <canvas id="barChart" style="height:230px"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="table-data">
+                <div class="order">
+                    <div class="head">
+                        <h3>Recent Orders</h3>
+                        <!-- <i class='bx bx-search'></i>
+                        <i class='bx bx-filter'></i> -->
+                    </div>
+                    <table>
+
+                        <thead>
+                            <tr>
+                                <th>User</th>
+                                <th>Date Order</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <% for(let i=0 ;i < recent.length;i++){%>
+                            <tbody>
+
+                                <tr>
+                                    <td>
+                                        <!-- <img src="img/people.png"> -->
+                                        <p>
+                                            <%=recent[i].userId %>
+                                        </p>
+                                    </td>
+                                    <td>
+                                        <%= recent[i].date%>
+                                    </td>
+                                    <td>
+                                        <% if(recent[i].orderStatus=='Placed' ){%>
+                                            <span class="status" style="background:rgb(255, 0, 217) ;">Placed</span>
+                                            <%}else if(recent[i].orderStatus=='Pending' ){%>
+                                                <span class="status" style="background: #fd7238;">Pending</span>
+                                                <%}else if(recent[i].orderStatus=='Shipping' ){%>
+                                                    <span class="status" style="background: #3c91e6;">Shipping</span>
+                                                    <%}else if(recent[i].orderStatus=='Out for delivery' ){%>
+                                                        <span class="status" style="background: rgb(210, 204, 18);">Out
+                                                            for deliivery</span>
+                                                        <%}else if(recent[i].orderStatus=='Delivered' ){%>
+                                                            <span class="status" style="background: rgb(0, 195, 0);">Delivered</span>
+                                                            <%}else{%>
+                                                                <span class="status" style="background: red;">Cancelled</span>
+                                                                <%}%>
+                                                                    </p>
+                                    </td>
+                                </tr>
+
+
+                            </tbody>
+                            <% } %>
+                    </table>
+
+                </div>
+                <div class="order">
+                    <div class="head">
+                        <h3>Calender</h3>
+                        <!-- <i class='bx bx-plus'></i>
+                        <i class='bx bx-filter'></i> -->
+                    </div>
+                    <div class="calendar">
+                        <div class="calendar-header">
+                            <span class="month-picker" id="month-picker">April</span>
+                            <div class="year-picker">
+                                <span class="year-change" id="prev-year">
+                                    <pre><</pre>
+                                </span>
+                                <span id="year">2022</span>
+                                <span class="year-change" id="next-year">
+                                    <pre>></pre>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="calendar-body">
+                            <div class="calendar-week-day">
+                                <div>Sun</div>
+                                <div>Mon</div>
+                                <div>Tue</div>
+                                <div>Wed</div>
+                                <div>Thu</div>
+                                <div>Fri</div>
+                                <div>Sat</div>
+                            </div>
+                            <div class="calendar-days"></div>
+                        </div>
+
+                        <div class="month-list"></div>
+                    </div>
+                    <div style="float: right;
+    margin-top: -378px;
+    width: 520px;">
+                        <div id="timedate">
+                            <a id="mon">January</a>
+                            <a id="d">1</a>,
+                            <a id="y">0</a><br />
+                            <a id="h">12</a> :
+                            <a id="m">00</a>:
+                            <a id="s">00</a>:
+                            <a id="mi">000</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+    </section>
+
+
+    <script>
+        var button = document.getElementById("toggle-btn");
+        var div = document.getElementById("order");
+        var span = document.getElementById("span");
+        var icon = document.getElementById("icon");
+        button.addEventListener("click", function() {
+            if (div.style.display === "none") {
+                div.style.display = "block";
+                span.textContent = "BACK"
+                icon.style.display = "none"
+
+            } else {
+                span.textContent = "Download PDF"
+                div.style.display = "none";
+            }
+        });
+
+        let calendar = document.querySelector('.calendar')
+
+        const month_names = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+
+        isLeapYear = (year) => {
+            return (year % 4 === 0 && year % 100 !== 0 && year % 400 !== 0) || (year % 100 === 0 && year % 400 === 0)
+        }
+
+        getFebDays = (year) => {
+            return isLeapYear(year) ? 29 : 28
+        }
+
+        generateCalendar = (month, year) => {
+
+            let calendar_days = calendar.querySelector('.calendar-days')
+            let calendar_header_year = calendar.querySelector('#year')
+
+            let days_of_month = [31, getFebDays(year), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+
+            calendar_days.innerHTML = ''
+
+            let currDate = new Date()
+            if (month > 11 || month < 0) month = currDate.getMonth()
+            if (!year) year = currDate.getFullYear()
+
+            let curr_month = `${month_names[month]}`
+            month_picker.innerHTML = curr_month
+            calendar_header_year.innerHTML = year
+
+            // get first day of month
+
+            let first_day = new Date(year, month, 1)
+
+            for (let i = 0; i <= days_of_month[month] + first_day.getDay() - 1; i++) {
+                let day = document.createElement('div')
+                if (i >= first_day.getDay()) {
+                    day.classList.add('calendar-day-hover')
+                    day.innerHTML = i - first_day.getDay() + 1
+                    day.innerHTML += `<span></span>
+                            <span></span>
+                            <span></span>
+                            <span></span>`
+                    if (i - first_day.getDay() + 1 === currDate.getDate() && year === currDate.getFullYear() && month === currDate.getMonth()) {
+                        day.classList.add('curr-date')
+                    }
+                }
+                calendar_days.appendChild(day)
+            }
+        }
+
+        let month_list = calendar.querySelector('.month-list')
+
+        month_names.forEach((e, index) => {
+            let month = document.createElement('div')
+            month.innerHTML = `<div data-month="${index}">${e}</div>`
+            month.querySelector('div').onclick = () => {
+                month_list.classList.remove('show')
+                curr_month.value = index
+                generateCalendar(index, curr_year.value)
+            }
+            month_list.appendChild(month)
+        })
+
+        let month_picker = calendar.querySelector('#month-picker')
+
+        month_picker.onclick = () => {
+            month_list.classList.add('show')
+        }
+
+        let currDate = new Date()
+
+        let curr_month = {
+            value: currDate.getMonth()
+        }
+        let curr_year = {
+            value: currDate.getFullYear()
+        }
+
+        generateCalendar(curr_month.value, curr_year.value)
+
+        document.querySelector('#prev-year').onclick = () => {
+            --curr_year.value
+            generateCalendar(curr_month.value, curr_year.value)
+        }
+
+        document.querySelector('#next-year').onclick = () => {
+            ++curr_year.value
+            generateCalendar(curr_month.value, curr_year.value)
+        }
+
+        // START CLOCK SCRIPT
+
+        Number.prototype.pad = function(n) {
+            for (var r = this.toString(); r.length < n; r = 0 + r);
+            return r;
+        };
+
+        function updateClock() {
+            var now = new Date();
+            var milli = now.getMilliseconds(),
+                sec = now.getSeconds(),
+                min = now.getMinutes(),
+                hou = now.getHours(),
+                mo = now.getMonth(),
+                dy = now.getDate(),
+                yr = now.getFullYear();
+            var months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            var tags = ["mon", "d", "y", "h", "m", "s", "mi"],
+                corr = [months[mo], dy, yr, hou.pad(2), min.pad(2), sec.pad(2), milli];
+            for (var i = 0; i < tags.length; i++)
+                document.getElementById(tags[i]).firstChild.nodeValue = corr[i];
+        }
+
+        function initClock() {
+            updateClock();
+            window.setInterval("updateClock()", 1);
+        }
+    </script>
+    <script>
+        const category = document.getElementById('pieChart').value.split(',').map(Number);
+
+        var data = {
+            labels: ["SHIRT", "T-SHIRT", "TROUSERS", "JEANS", "HOODIES"],
+            datasets: [{
+                label: "My First Dataset",
+                data: [category[0], category[1], category[2], category[3], category[4]],
+                backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#BE61CA", "#7AC142"],
+                hoverBackgroundColor: ["#FF6384", "#36A2EB", "#FFCE56", "#BE61CA", "#7AC142"]
+            }]
+        };
+
+        // Options
+        var options = {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Category Chart'
+            },
+            animation: {
+                animateScale: true,
+                animateRotate: true
+            }
+        };
+
+        // Generate the chart
+        var ctx = document.getElementById("myChart").getContext("2d");
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: data,
+            options: options
+        });
+    </script>
+    <script>
+        // Sample data for one week
+        const Weekly = document.getElementById('bargraph').value.split(',').map(Number);
+        var data = {
+            labels: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+            datasets: [{
+                label: "Sales",
+                data: [Weekly[0], Weekly[1], Weekly[2], Weekly[3], Weekly[4], Weekly[5], Weekly[6]],
+                backgroundColor: "#36A2EB"
+            }]
+        };
+
+        // Options
+        var options = {
+            responsive: true,
+            title: {
+                display: true,
+                text: 'Weekly Sales'
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }],
+                xAxes: [{
+                    barPercentage: 0.6 // reduce bar width to 50%
+                }]
+            }
+        };
+
+        // Generate the chart
+        var ctx = document.getElementById("barChart").getContext("2d");
+        var myBarChart = new Chart(ctx, {
+            type: 'bar',
+            data: data,
+            options: options
+        });
+    </script>
+    <%- include('../adminlayouts/adminfooter.ejs') %>
