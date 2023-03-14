@@ -162,6 +162,7 @@ exports.getProductc = async(req, res, next) => {
         }
 
         const productData = await Products.findById({ _id: id })
+       
         const category = await Products.findOne({
             _id: id,
             $or: [
@@ -172,7 +173,9 @@ exports.getProductc = async(req, res, next) => {
                 { color: { $regex: '.*' + search + '.*', $options: 'i' } }
             ]
         }, { category: 1, _id: 0 })
+      
         const relate = await Products.find({ category: category.category }).limit(4)
+  
         const wishlist = await Wishlist.findOne({ userId: req.session.user_id })
 
         let wishlistcount = 0
@@ -180,13 +183,17 @@ exports.getProductc = async(req, res, next) => {
         let wishlistc = [0]
         if (req.session.user_id) {
             const userData = await User.findById({ _id: req.session.user_id })
-                // userData = await User.findById({ _id: req.session.user_id })
+          
             const cart = await Cart.findOne({ userId: userData._id })
 
             if (cart && wishlist) {
+            
                 cartcount = cart.products.length
+            
                 wishlistcount = wishlist.products.length
+         
                 wishlistc = wishlist.products
+            
 
                 res.render('product', {
                     productData,
@@ -197,6 +204,7 @@ exports.getProductc = async(req, res, next) => {
                     wishlistc
                 })
             } else if (cart) {
+            
                 cartcount = cart.products.length
                 res.render('product', {
                     productData,
@@ -207,6 +215,7 @@ exports.getProductc = async(req, res, next) => {
                     wishlistc
                 })
             } else if (wishlist) {
+       
                 wishlistcount = wishlist.products.length
                 wishlistc = wishlist.products
                 res.render('product', {
@@ -218,6 +227,7 @@ exports.getProductc = async(req, res, next) => {
                     wishlistc
                 })
             } else {
+            
                 wishlistc = wishlist.products
                 res.render('product', {
                     productData,
@@ -229,6 +239,7 @@ exports.getProductc = async(req, res, next) => {
                 })
             }
         } else {
+       
             res.render('product', {
                 productData,
                 relate,

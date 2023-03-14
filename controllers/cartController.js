@@ -4,46 +4,73 @@ const User = require('../models/usermodel')
 const Products = require('../models/products')
 const Coupon = require('../models/coupon')
 
+
 exports.addCart = async(req, res, next) => {
     try {
-        const { user_id } = req.session;
-        if (!user_id) return res.json({ success: 'logout' });
+        if (req.session.user_id) {
+            const id = req.params.productId
 
-        const { productId: id } = req.params;
-        const [userData, productData, cartData] = await Promise.all([
-            User.findById(user_id),
-            Products.findById(id),
-            Cart.find({ userId: user_id }),
-        ]);
+            const userData = await User.findById({ _id: req.session.user_id })
+            const productData = await Products.findById({ _id: id })
+            const cartData = await Cart.find({ userId: userData })
 
-        if (productData.stock <= 0) return res.json({ success: 'stockout' });
+            if (productData.stock > 0) {
+                let existData = await Cart.findOne({
+                    userId: req.session.user_id,
+                    products: { $elemMatch: { productId: id } }
+                })
+                if (cartData.length > 0) {
+                    if (existData === null) {
+                        const productData1 = {
+                            productId: productData._id,
+                            quantity: 1,
+                            price: productData.offerPrice
+                        }
 
-        const existData = await Cart.findOne({
-            userId: user_id,
-            products: { $elemMatch: { productId: id } },
-        });
+                        const updateCartData = await Cart.updateOne({ userId: userData }, { $push: { products: {...productData1 } } })
+                        const deletewishData = await Wishlist.updateOne({ userId: userData }, { $pull: { products: id } });
+                        res.json({
+                            success: 'added'
+                        })
+                    } else {
+                        await Cart.findOneAndUpdate({ userId: req.session.user_id, 'products.productId': id }, { $inc: { 'products.$.quantity': 1 } })
 
-        const productData1 = {
-            productId: productData._id,
-            quantity: 1,
-            price: productData.offerPrice,
-        };
+                        let cart = await Cart.findOne({
+                            userId: req.session.user_id,
+                            'products.productId': id
+                        })
+                        let quantity = cart.products.find(p => p.productId == id).quantity
 
-        const deletewishData = await Wishlist.updateOne({ userId: userData }, { $pull: { products: id } });
-
-        if (existData === null) {
-            const updateCartData = await Cart.updateOne({ userId: userData }, { $push: { products: {...productData1 } } });
-            const updateData = await Cart.findOne({ userId: user_id });
-            const count = updateData.products.length;
-            return res.json({ success: 'added', count });
+                        const price = quantity * productData.offerPrice
+                        const updatedCart = await Cart.findOneAndUpdate({ userId: req.session.user_id, 'products.productId': id }, { $set: { 'products.$.price': price } })
+                        const deletewishData = await Wishlist.updateOne({ userId: userData }, { $pull: { products: id } });
+                        res.json({ success: 'already' })
+                    }
+                } else {
+                    const newcart = new Cart({
+                        userId: userData._id,
+                        products: [{
+                            productId: productData._id,
+                            price: productData.offerPrice,
+                            quantity: 1
+                        }]
+                    })
+                    const cartData = await newcart.save()
+                    const deletewishData = await Wishlist.updateOne({ userId: userData }, { $pull: { products: id } });
+                    res.json({ success: 'added' })
+                }
+            } else {
+                res.json({ success: 'stockout' })
+            }
+        } else {
+            res.json({ success: 'logout' })
         }
-
-        return res.json({ success: 'already' });
     } catch (error) {
-        console.log(error.message);
-        next(error.message);
+        console.log(error.message)
+        next(error.message);;
     }
-};
+
+}
 
 exports.getCart = async(req, res, next) => {
     try {

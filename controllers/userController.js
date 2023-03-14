@@ -161,7 +161,7 @@ exports.signOTP = async(req, res, next) => {
 exports.getOTP = async(req, res, next) => {
     try {
         const referer = req.get('referer');
-        if (referer && referer.endsWith('/mobile')) {
+        if (referer && referer.endsWith('/mobile','/signup')) {
             res.render('otpcheck', { message: 'OTP Sent successfully' })
         } else {
             res.status(403).send('Access denied');

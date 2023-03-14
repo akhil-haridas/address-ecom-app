@@ -3,7 +3,7 @@ const mongoose = require('mongoose')
 require('dotenv').config();
 mongoose.set('strictQuery', false)
 
-mongoose.connect(process.env.MONGOOSE_LINK).then(() => {
+mongoose.connect('mongodb://127.0.0.1:27017/address_Fstore').then(() => {
   console.log('database connected');
 }).catch((err) => {
   console.log(err);
@@ -14,7 +14,7 @@ const express = require('express')
 
 
 //creating port
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 3000
 const router = express()
 const session = require('express-session')
 
