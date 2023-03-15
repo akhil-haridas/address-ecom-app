@@ -239,20 +239,24 @@
                             </svg>
                         </section>
                         <section style="width: 244px;">
-
-                            <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200" xmlns="http://www.w3.org/2000/svg" style="margin-left: 5px;">
-                                <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none"
+                            <svg class="circle-chart" viewbox="0 0 33.83098862 33.83098862" width="200" height="200"
+                                xmlns="http://www.w3.org/2000/svg" style="margin-left: 5px;">
+                                <circle class="circle-chart__background" stroke="#efefef" stroke-width="2" fill="none" cx="16.91549431"
+                                    cy="16.91549431" r="15.91549431" />
+                                <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2"
+                                    stroke-dasharray="<%=donutChart[2]/100*2*Math.PI*15.91549431%>, 100" stroke-linecap="round" fill="none"
                                     cx="16.91549431" cy="16.91549431" r="15.91549431" />
-                                <circle class="circle-chart__circle" stroke="#00acc1" stroke-width="2" stroke-dasharray="<%=donutChart[2]/100*2*Math.PI*15.91549431%>100"
-                                    stroke-linecap="round" fill="none" cx="16.91549431" cy="16.91549431" r="15.91549431" />
                                 <g class="circle-chart__info">
                                     <text class="circle-chart__percent" x="16.91549431" y="15.5" alignment-baseline="central"
-                                        text-anchor="middle" font-size="8"><%=donutChart[2]%>%</text>
+                                        text-anchor="middle" font-size="8">
+                                        <%=donutChart[2]%>%
+                                    </text>
                                     <text class="circle-chart__subline" x="16.91549431" y="20.5" alignment-baseline="central"
                                         text-anchor="middle" font-size="2">Wallet Amount</text>
                                 </g>
                             </svg>
                         </section>
+
 
                     </div>
                 </div>
