@@ -36,24 +36,34 @@
 </head>
 
 <body>
-    <!-- Page Preloder -->
-    <!-- <div id="preloder">
-        <div class="loader"></div>
-    </div> -->
-
+            
     <!-- Offcanvas Menu Begin -->
     <div class="offcanvas-menu-overlay"></div>
     <div class="offcanvas-menu-wrapper">
         <div class="offcanvas__close">+</div>
+        <%if(typeof userData=='undefined' ){%>
         <ul class="offcanvas__widget">
             <li><span class="icon_search search-switch"></span></li>
-            <li><a href="#"><span class="icon_heart_alt"></span>
-                <div class="tip">2</div>
+            <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                
             </a></li>
-            <li><a href="#"><span class="icon_bag_alt"></span>
-                <div class="tip">2</div>
+            <li><a href="/cart"><span class="icon_bag_alt"></span>
+                
             </a></li>
         </ul>
+        <%}else{%>
+                    <ul class="offcanvas__widget">
+                        <li><span class="icon_search search-switch"></span></li>
+                        <li><a href="/wishlist"><span class="icon_heart_alt"></span>
+                                <div class="tip"><%=wishlistcount%></div>
+                            </a></li>
+                        <li><a href="/cart"><span class="icon_bag_alt"></span>
+                                <div class="tip"><%=cartcount%></div>
+                            </a></li>
+                    </ul>
+
+                    <%}%>
+
         <div class="offcanvas__logo" style="width: 150px; height: 25px;">
             <a href="/"><img src="/img/address.png" alt=""></a>
         </div>
