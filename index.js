@@ -17,7 +17,7 @@ const express = require('express')
 
 
 //creating port
-const port = process.env.PORT || 4000
+const port = process.env.PORT || 8000
 const router = express()
 const session = require('express-session')
 

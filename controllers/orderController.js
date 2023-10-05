@@ -16,7 +16,7 @@ var instance = new Razorpay({
 
 //for sales report
 const ejs = require('ejs')
-const pdf = require('html-pdf')
+// const pdf = require('html-pdf')
 const path = require('path')
 const fs = require('fs')
 const moment = require('moment-timezone');
@@ -1078,171 +1078,171 @@ exports.salesReport = async(req, res, next) => {
 
 
 exports.downloadReport = async(req, res, next) => {
-    try {
-        // Convert from and to dates to the correct timezone
-        const timezone = 'Asia/Kolkata';
-        const from = moment.tz(req.body.start, timezone).toDate();
-        const to = moment.tz(req.body.end, timezone).toDate();
+    // try {
+    //     // Convert from and to dates to the correct timezone
+    //     const timezone = 'Asia/Kolkata';
+    //     const from = moment.tz(req.body.start, timezone).toDate();
+    //     const to = moment.tz(req.body.end, timezone).toDate();
 
-        var fromDate = req.body.start.split('-');
-        var toDate = req.body.end.split('-');
-        var today = Date().slice(0, 24)
-        const orderData = await Order.aggregate([
-            // Filter orders by date range
-            {
-                $match: {
-                    createdAt: {
-                        $gte: from,
-                        $lte: to
-                    },
-                    orderStatus: "Delivered"
+    //     var fromDate = req.body.start.split('-');
+    //     var toDate = req.body.end.split('-');
+    //     var today = Date().slice(0, 24)
+    //     const orderData = await Order.aggregate([
+    //         // Filter orders by date range
+    //         {
+    //             $match: {
+    //                 createdAt: {
+    //                     $gte: from,
+    //                     $lte: to
+    //                 },
+    //                 orderStatus: "Delivered"
 
-                }
-            },
-            // Unwind the products array
-            {
-                $unwind: "$products"
-            },
+    //             }
+    //         },
+    //         // Unwind the products array
+    //         {
+    //             $unwind: "$products"
+    //         },
 
-            // Join with the products collection
-            {
-                $lookup: {
-                    from: "products",
-                    localField: "products.productId",
-                    foreignField: "_id",
-                    as: "product"
-                }
-            },
+    //         // Join with the products collection
+    //         {
+    //             $lookup: {
+    //                 from: "products",
+    //                 localField: "products.productId",
+    //                 foreignField: "_id",
+    //                 as: "product"
+    //             }
+    //         },
 
-            // Unwind the product array
-            {
-                $unwind: "$product"
-            },
+    //         // Unwind the product array
+    //         {
+    //             $unwind: "$product"
+    //         },
 
-            // Group by product_id and calculate total quantity and amount
-            {
-                $group: {
-                    _id: "$product._id",
-                    name: { $first: "$product.name" },
-                    rating: {
-                        $first: "$product.rating"
-                    },
-                    offerPrice: { $first: "$product.offerPrice" },
-                    sales: {
-                        $push: {
-                            order_id: "$_id",
-                            quantity: "$products.quantity",
-                            amount: { $multiply: ["$products.quantity", "$product.offerPrice"] }
-                        }
-                    },
-                    total_quantity: { $sum: "$products.quantity" },
-                    total_amount: { $sum: { $multiply: ["$products.quantity", "$product.offerPrice"] } }
-                }
-            }
+    //         // Group by product_id and calculate total quantity and amount
+    //         {
+    //             $group: {
+    //                 _id: "$product._id",
+    //                 name: { $first: "$product.name" },
+    //                 rating: {
+    //                     $first: "$product.rating"
+    //                 },
+    //                 offerPrice: { $first: "$product.offerPrice" },
+    //                 sales: {
+    //                     $push: {
+    //                         order_id: "$_id",
+    //                         quantity: "$products.quantity",
+    //                         amount: { $multiply: ["$products.quantity", "$product.offerPrice"] }
+    //                     }
+    //                 },
+    //                 total_quantity: { $sum: "$products.quantity" },
+    //                 total_amount: { $sum: { $multiply: ["$products.quantity", "$product.offerPrice"] } }
+    //             }
+    //         }
 
-        ]);
+    //     ]);
 
-        const orders = await Order.aggregate([{
-                $match: { orderStatus: "Delivered" }
-            },
-            {
-                $lookup: {
-                    from: "users",
-                    localField: "userId",
-                    foreignField: "_id",
-                    as: "user"
-                }
-            },
-            {
-                $unwind: "$products"
-            },
-            {
-                $lookup: {
-                    from: "products",
-                    localField: "products.productId",
-                    foreignField: "_id",
-                    as: "product"
-                }
-            },
-            {
-                $group: {
-                    _id: "$_id",
-                    userName: { $first: "$user.name" },
-                    products: { $push: "$product.name" },
-                    orderTotal: { $sum: "$total" },
-                    date: { $first: '$date' },
-                    pqty: { $push: '$products.quantity' },
-                }
-            }
-        ])
+    //     const orders = await Order.aggregate([{
+    //             $match: { orderStatus: "Delivered" }
+    //         },
+    //         {
+    //             $lookup: {
+    //                 from: "users",
+    //                 localField: "userId",
+    //                 foreignField: "_id",
+    //                 as: "user"
+    //             }
+    //         },
+    //         {
+    //             $unwind: "$products"
+    //         },
+    //         {
+    //             $lookup: {
+    //                 from: "products",
+    //                 localField: "products.productId",
+    //                 foreignField: "_id",
+    //                 as: "product"
+    //             }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: "$_id",
+    //                 userName: { $first: "$user.name" },
+    //                 products: { $push: "$product.name" },
+    //                 orderTotal: { $sum: "$total" },
+    //                 date: { $first: '$date' },
+    //                 pqty: { $push: '$products.quantity' },
+    //             }
+    //         }
+    //     ])
 
-        const totalSale = await Order.aggregate([{
-                $match: { orderStatus: "Delivered" }
-            },
-            {
-                $group: {
-                    _id: null,
-                    totalSaleAmount: { $sum: "$total" }
-                }
-            }
-        ])
+    //     const totalSale = await Order.aggregate([{
+    //             $match: { orderStatus: "Delivered" }
+    //         },
+    //         {
+    //             $group: {
+    //                 _id: null,
+    //                 totalSaleAmount: { $sum: "$total" }
+    //             }
+    //         }
+    //     ])
 
-        const deliveredCount = await Order.find({ orderStatus: "Delivered" }).count()
+    //     const deliveredCount = await Order.find({ orderStatus: "Delivered" }).count()
 
-        const cancelledCount = await Order.find({ orderStatus: "Cancelled" }).count()
+    //     const cancelledCount = await Order.find({ orderStatus: "Cancelled" }).count()
 
-        const returnedCount = await Order.find({ orderStatus: "Returned" }).count()
+    //     const returnedCount = await Order.find({ orderStatus: "Returned" }).count()
 
-        const data = {
-            order: orderData,
-            fromDate,
-            toDate,
-            today,
-            orders,
-            totalSale
-        }
-        const filePathName = path.resolve(__dirname, '../views/admin/download.ejs');
-        const htmlString = fs.readFileSync(filePathName).toString();
-        const options = {
-            format: 'Letter'
-        }
-        const ejsData = ejs.render(htmlString, data)
-        const pdfPromise = new Promise((resolve, reject) => {
-            pdf.create(ejsData, options).toStream((err, stream) => {
-                if (err) reject(err)
-                else resolve(stream)
-            })
-        })
+    //     const data = {
+    //         order: orderData,
+    //         fromDate,
+    //         toDate,
+    //         today,
+    //         orders,
+    //         totalSale
+    //     }
+    //     const filePathName = path.resolve(__dirname, '../views/admin/download.ejs');
+    //     const htmlString = fs.readFileSync(filePathName).toString();
+    //     const options = {
+    //         format: 'Letter'
+    //     }
+    //     const ejsData = ejs.render(htmlString, data)
+    //     const pdfPromise = new Promise((resolve, reject) => {
+    //         pdf.create(ejsData, options).toStream((err, stream) => {
+    //             if (err) reject(err)
+    //             else resolve(stream)
+    //         })
+    //     })
 
-        const stream = await pdfPromise
+    //     const stream = await pdfPromise
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": "attachment; filename=SalesReport.pdf"
-        })
-        stream.pipe(res)
-            // pdf.create(ejsData, options).toStream('../salesReport.pdf', (err, response) => {
-            //     if (err) console.log(err)
+    //     res.set({
+    //         "Content-Type": "application/pdf",
+    //         "Content-Disposition": "attachment; filename=SalesReport.pdf"
+    //     })
+    //     stream.pipe(res)
+    //         // pdf.create(ejsData, options).toStream('../salesReport.pdf', (err, response) => {
+    //         //     if (err) console.log(err)
 
-        //     const filePath = path.resolve(__dirname, '../SalesReport.pdf')
+    //     //     const filePath = path.resolve(__dirname, '../SalesReport.pdf')
 
-        //     fs.readFile(filePath, (err, file) => {
-        //         if (err) {
-        //             console.log(err)
-        //             return res.status(500).send('Can not download file')
-        //         }
-        //         res.setHeader('Content-Type', 'application/pdf')
-        //         res.setHeader('Content-Disposition', 'attachment;filename="SalesReport.pdf"')
+    //     //     fs.readFile(filePath, (err, file) => {
+    //     //         if (err) {
+    //     //             console.log(err)
+    //     //             return res.status(500).send('Can not download file')
+    //     //         }
+    //     //         res.setHeader('Content-Type', 'application/pdf')
+    //     //         res.setHeader('Content-Disposition', 'attachment;filename="SalesReport.pdf"')
 
 
 
-        //         res.send(file)
-        //     })
-        // })
+    //     //         res.send(file)
+    //     //     })
+    //     // })
 
-    } catch (error) {
-        console.log(error.message)
-        next(error.message);;
-    }
+    // } catch (error) {
+    //     console.log(error.message)
+    //     next(error.message);;
+    // }
 
 }
