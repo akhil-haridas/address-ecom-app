@@ -41,8 +41,11 @@ admin_route.set('view engine', 'ejs')
 admin_route.set('views', './views/admin')
 
 //Image
-const multer = require('multer')
 // const path = require('path')
+const multer = require('multer');
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+const cloudinary = require('../configuration/cloudinary');
 
 admin_route.use(express.static('public'))
 
