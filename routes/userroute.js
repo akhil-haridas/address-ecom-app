@@ -45,21 +45,34 @@ user_route.use(bodyParser.urlencoded({ extended: true }))
 
 
 const multer = require("multer");
-const path = require('path');
 
 user_route.use(express.static('public'));
 
 //user image
-const storage4 = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, path.join(__dirname, '../public/userimg'))
-    },
-    filename: function(req, file, cb) {
-        const name = Date.now() + '-' + file.originalname;
-        cb(null, name)
+const userStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+
+    params: {
+        folder: 'users',
+
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+
+        transformation: [
+            {
+                width: 500,
+                height: 500,
+                crop: 'fill',
+                gravity: 'face',
+                quality: 'auto',
+                fetch_format: 'auto'
+            }
+        ]
     }
 });
-const upload4 = multer({ storage: storage4 });
+
+const upload4 = multer({
+    storage: userStorage
+});
 
 
 
