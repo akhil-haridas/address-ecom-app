@@ -56,7 +56,18 @@ const productStorage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
         folder: 'products',
-        allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
+
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp'],
+
+        transformation: [
+            {
+                width: 1100,
+                height: 1467,
+                crop: 'fill',
+                quality: 'auto',
+                fetch_format: 'auto'
+            }
+        ]
     }
 });
 
