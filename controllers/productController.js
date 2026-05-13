@@ -574,29 +574,36 @@ exports.removeProduct = async (req, res, next) => {
     }
 };
 
-exports.removeImage = async (req, res, next) => {
+exports.removeImage = async(req, res, next) => {
+
     try {
-        const path = require("path");
+
         const image = req.params.image;
-        const imagePath = path.join(
-            __dirname,
-            "..",
-            "public",
-            "products_img",
-            image,
-        );
 
         const Product = await Products.findOne({
-            image: { $elemMatch: { $eq: image } },
+            image: {
+                $elemMatch: {
+                    $eq: image
+                }
+            }
         });
-        const pullImage = await Products.updateOne(
+
+        await Products.updateOne(
             { _id: Product._id },
-            { $pull: { image: image } },
+            { $pull: { image: image } }
         );
 
-        res.json({ status: true, Product: Product._id });
+        res.json({
+            status: true,
+            Product: Product._id
+        });
+
     } catch (error) {
+
         console.log(error.message);
-        next(error.message);
+
+        next(error);
+
     }
-};
+
+}
