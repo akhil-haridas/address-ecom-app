@@ -45,6 +45,9 @@ user_route.use(bodyParser.urlencoded({ extended: true }))
 
 
 const multer = require("multer");
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
+
+const cloudinary = require('../configuration/cloudinary');
 
 user_route.use(express.static('public'));
 
