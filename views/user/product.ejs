@@ -214,12 +214,12 @@
                             <a class="pt active" href="#image-1">
 
                                 
-                                <img src="/products_img/<%=productData.image[0]%>" alt="">
+                                <img src="<%=productData.image[0]%>" alt="">
 
                             </a>
                             <% for(let i=1 ; i< productData.image.length;i++){%>
                                 <a class="pt" href="#image-<%=i+1%>">
-                                <img src="/products_img/<%=productData.image[i]%>" alt="">
+                                <img src="<%=productData.image[i]%>" alt="">
                                 
                             </a>
                                 <%  } %>
@@ -227,8 +227,8 @@
                         <div class="product__details__slider__content" style="width: 411.896px;">
                             <div class="product__details__pic__slider owl-carousel">
                                 <% for(let i=0 ; i< productData.image.length;i++){%>
-                                    <figure class="zoom" onmousemove="zoom(event)" style="background-image: url(/products_img/<%=productData.image[i]%>)">
-                                        <img data-hash="image-<%=i+1%>" class="product__big__img" src="/products_img/<%=productData.image[i]%>" alt="">
+                                    <figure class="zoom" onmousemove="zoom(event)" style="background-image: url(<%=productData.image[i]%>)">
+                                        <img data-hash="image-<%=i+1%>" class="product__big__img" src="<%=productData.image[i]%>" alt="">
                                     </figure>
                                     <%  } %>
                             </div>
@@ -387,7 +387,7 @@
                 <% for(let i=0 ; i< relate.length;i++){%>
                     <div class="col-lg-3 col-md-4 col-sm-6 ">
                         <div class="product__item ">
-                            <div class="product__item__pic set-bg " data-setbg="/products_img/<%=relate[i].image[0]%>">
+                            <div class="product__item__pic set-bg " data-setbg="<%=relate[i].image[0]%>">
                                 <% if(relate[i].stock <= 0){%>
                                     <div class="label stockout">STOCK OUT</div>
                                     <%} else if(relate[i].stock <= 15){%>

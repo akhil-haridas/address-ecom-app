@@ -481,9 +481,9 @@
                         const productHTML = `
                                         <div class="col-lg-4 col-md-6">
                                         <div class="product__item">
-                                        <div class="product__item__pic set-bg" style="background-image: url('/products_img/${productData.image[0]}')">
+                                        <div class="product__item__pic set-bg" style="background-image: url('${productData.image[0]}')">
                                         <ul class="product__hover">
-                                        <li><a href="/products_img/${productData.image[0]}" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                        <li><a href="${productData.image[0]}" class="image-popup"><span class="arrow_expand"></span></a></li>
                                         <li><a onclick="addWishlist('${productData._id}')" id="${productData._id}"><span class="icon_heart_alt"></span></a></li>
                                         <input type="hidden" value="${totalPages}" id="totalpage">
                                         <% if('${productData.stock}' != 0){%>

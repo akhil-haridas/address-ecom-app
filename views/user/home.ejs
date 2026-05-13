@@ -135,7 +135,7 @@
                     <div class="col-lg-3 col-md-4 col-sm-6 mix women">
 
                         <div class="product__item">
-                            <div class="product__item__pic set-bg" data-setbg="/products_img/<%= productData[i].image[0]%>">
+                            <div class="product__item__pic set-bg" data-setbg="<%= productData[i].image[0]%>">
                                 <% if(productData[i].stock <= 0){%>
                                     <div class="label stockout">STOCK OUT</div>
                                     <%} else if(productData[i].stock <= 15){%>
@@ -146,7 +146,7 @@
                                                 <div class="label yellow">sale</div>
                                                 <%}%>
                                                     <ul class="product__hover">
-                                                        <li><a href="/products_img/<%=productData[i].image[0]%>" class="image-popup"><span class="arrow_expand"></span></a></li>
+                                                        <li><a href="<%=productData[i].image[0]%>" class="image-popup"><span class="arrow_expand"></span></a></li>
 
 
                                                         <% if(wishlist.includes(productData[i]._id)){ %>
