@@ -357,8 +357,8 @@ exports.postAddcat = async(req, res, next) => {
         const description = req.body.description
         const image = req.file.path
 
-        const unique = await Category.findOne({ category: { $regex: name, $options: 'i' } })
-        console.log(unique, "hihihi")
+        const unique = await Category.findOne({ category: name })
+
         if (!unique) {
             const category = new Category({
                 category: name,
