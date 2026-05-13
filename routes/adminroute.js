@@ -42,47 +42,47 @@ admin_route.set('views', './views/admin')
 
 //Image
 const multer = require('multer')
-const path = require('path')
+// const path = require('path')
 
 admin_route.use(express.static('public'))
 
 
 
-//product image
-const storage = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, path.join(__dirname, '../public/products_img'))
-    },
-    filename: function(req, file, cb) {
-        const name = Date.now() + '-' + file.originalname
-        cb(null, name)
-    }
-})
-const upload = multer({ storage: storage })
+// //product image
+// const storage = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, path.join(__dirname, '../public/products_img'))
+//     },
+//     filename: function(req, file, cb) {
+//         const name = Date.now() + '-' + file.originalname
+//         cb(null, name)
+//     }
+// })
+// const upload = multer({ storage: storage })
 
-//category image
-const storage2 = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, path.join(__dirname, '../public/category_img'))
-    },
-    filename: function(req, file, cb) {
-        const name = Date.now() + '-' + file.originalname
-        cb(null, name)
-    }
-})
-const upload2 = multer({ storage: storage2 })
+// //category image
+// const storage2 = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, path.join(__dirname, '../public/category_img'))
+//     },
+//     filename: function(req, file, cb) {
+//         const name = Date.now() + '-' + file.originalname
+//         cb(null, name)
+//     }
+// })
+// const upload2 = multer({ storage: storage2 })
 
-//banner image
-const storage3 = multer.diskStorage({
-    destination: function(req, file, cb) {
-        cb(null, path.join(__dirname, '../public/banner_img'))
-    },
-    filename: function(req, file, cb) {
-        const name = Date.now() + '-' + file.originalname
-        cb(null, name)
-    }
-})
-const upload3 = multer({ storage: storage3 })
+// //banner image
+// const storage3 = multer.diskStorage({
+//     destination: function(req, file, cb) {
+//         cb(null, path.join(__dirname, '../public/banner_img'))
+//     },
+//     filename: function(req, file, cb) {
+//         const name = Date.now() + '-' + file.originalname
+//         cb(null, name)
+//     }
+// })
+// const upload3 = multer({ storage: storage3 })
 
 
 
