@@ -369,7 +369,6 @@ exports.postAddcat = async(req, res, next) => {
             const categoryData = await category.save()
             res.redirect('/admin/category')
         } else {
-            console.log('already exist')
             res.redirect('/admin/category')
         }
     } catch (error) {
