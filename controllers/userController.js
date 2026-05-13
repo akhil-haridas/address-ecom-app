@@ -484,7 +484,7 @@ exports.getUpdateProfile = async(req, res, next) => {
         const surname = req.body.surname
         const email = req.body.email
         if (req.file != undefined) {
-            const image = req.file.filename
+            const image = req.file.path
 
             const updateUser = await User.findByIdAndUpdate({ _id: req.session.user_id }, {
                 $set: {
