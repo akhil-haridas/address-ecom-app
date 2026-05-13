@@ -2535,7 +2535,8 @@ ol {
 }
 
 .header__menu ul {
-    width: 217px;
+    min-width: 217px;
+    width: 100%;
 }
 
 
