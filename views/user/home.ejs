@@ -51,7 +51,7 @@
     </div>
     </header>
     <!-- Banner Section Begin -->
-    <section class="banner set-bg" data-setbg="/banner_img/<%= banner[1].image%>" id="banner" style="transition: background-image 1.0s ease-in-out;">
+    <section class="banner set-bg" data-setbg="<%= banner[1].image%>" id="banner" style="transition: background-image 1.0s ease-in-out;">
         <div class="container">
             <div class="row">
                 <div class="col-xl-7 col-lg-8 m-auto">
@@ -78,7 +78,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-lg-6 p-0">
-                    <div class="categories__item categories__large__item set-bg" data-setbg="/category_img/<%= category[0].image%>">
+                    <div class="categories__item categories__large__item set-bg" data-setbg="<%= category[0].image%>">
                         <div class="categories__text">
                             <h1>
                                 <%= category[0].category%>
@@ -98,7 +98,7 @@
                         <% for(let i=1 ; i< 5;i++){%>
                             <div class="col-lg-6 col-md-6 col-sm-6 p-0">
 
-                                <div class="categories__item set-bg" data-setbg="/category_img/<%= category[i].image%>">
+                                <div class="categories__item set-bg" data-setbg="<%= category[i].image%>">
                                     <div class="categories__text" style="margin-top: 180px;">
                                         <h4>
                                             <%= category[i].category%>
@@ -253,7 +253,7 @@
         const banner = document.querySelector('#banner');
 
         // define an array of image URLs
-        const imageUrls = ['/banner_img/<%= banner[1].image%>', '/banner_img/<%= banner[2].image%>', '/banner_img/<%= banner[0].image%>'];
+        const imageUrls = ['<%= banner[1].image%>', '<%= banner[2].image%>', '<%= banner[0].image%>'];
 
         // set an index to keep track of the current image
         let currentImageIndex = 0;
