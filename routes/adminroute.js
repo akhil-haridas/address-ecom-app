@@ -52,41 +52,43 @@ admin_route.use(express.static('public'))
 
 
 // //product image
-// const storage = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, path.join(__dirname, '../public/products_img'))
-//     },
-//     filename: function(req, file, cb) {
-//         const name = Date.now() + '-' + file.originalname
-//         cb(null, name)
-//     }
-// })
-// const upload = multer({ storage: storage })
+const productStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'products',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
+    }
+});
+
+const upload = multer({
+    storage: productStorage
+});
 
 // //category image
-// const storage2 = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, path.join(__dirname, '../public/category_img'))
-//     },
-//     filename: function(req, file, cb) {
-//         const name = Date.now() + '-' + file.originalname
-//         cb(null, name)
-//     }
-// })
-// const upload2 = multer({ storage: storage2 })
+const categoryStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'categories',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
+    }
+});
+
+const upload2 = multer({
+    storage: categoryStorage
+});
 
 // //banner image
-// const storage3 = multer.diskStorage({
-//     destination: function(req, file, cb) {
-//         cb(null, path.join(__dirname, '../public/banner_img'))
-//     },
-//     filename: function(req, file, cb) {
-//         const name = Date.now() + '-' + file.originalname
-//         cb(null, name)
-//     }
-// })
-// const upload3 = multer({ storage: storage3 })
+const bannerStorage = new CloudinaryStorage({
+    cloudinary: cloudinary,
+    params: {
+        folder: 'banners',
+        allowed_formats: ['jpg', 'jpeg', 'png', 'webp']
+    }
+});
 
+const upload3 = multer({
+    storage: bannerStorage
+});
 
 
 //Admin routes
