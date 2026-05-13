@@ -140,7 +140,7 @@ exports.getHome = async(req, res, next) => {
 
 
         const barChart = weeklySales.map(item => item.totalAmount);
-        const donutChart = paymentMethodWise.map(item => item.percentage);
+        const donutChart = paymentMethodWise.map(item => item?.percentage || 0);
         const pieChart = categoryWise.map(category => category.totalSale);
 
         const ordercount = await Orders.find({}).count()
